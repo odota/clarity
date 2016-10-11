@@ -1,21 +1,27 @@
 package skadistats.clarity.model;
 
-public class Entity {
+import skadistats.clarity.processor.entities.ClientFrame;
+import skadistats.clarity.processor.entities.EntityState;
+import skadistats.clarity.processor.sendtables.DTClasses;
 
-    private final EngineType engineType;
+public abstract class Entity {
+
     private final int index;
-    private final int serial;
-    private final DTClass dtClass;
-    private boolean active;
-    private final Object[] state;
+    private ClientFrame clientFrame;
 
-    public Entity(EngineType engineType, int index, int serial, DTClass dtClass, boolean active, Object[] state) {
-        this.engineType = engineType;
+    public Entity(int index) {
         this.index = index;
-        this.serial = serial;
-        this.dtClass = dtClass;
-        this.active = active;
-        this.state = state;
+    }
+
+    public void updateClientFrame(ClientFrame clientFrame) {
+        this.clientFrame = clientFrame;
+    }
+
+    protected abstract EngineType getEngineType();
+    protected abstract DTClasses getDtClasses();
+
+    private EntityState entityState() {
+        return clientFrame != null ? clientFrame.getState(index) : null;
     }
 
     public int getIndex() {
@@ -23,27 +29,23 @@ public class Entity {
     }
 
     public int getSerial() {
-        return serial;
+        return entityState() != null ? entityState().serial : -1;
     }
-    
+
     public int getHandle() {
-        return engineType.handleForIndexAndSerial(index, serial);
+        return getEngineType().handleForIndexAndSerial(index, getSerial());
     }
 
     public DTClass getDtClass() {
-        return dtClass;
+        return entityState() != null ? getDtClasses().forClassId(entityState().clsId) : null;
     }
 
     public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+        return entityState() != null ? entityState().active : false;
     }
 
     public Object[] getState() {
-        return state;
+        return entityState() != null ? entityState().propertyState : null;
     }
 
     /**
@@ -53,7 +55,7 @@ public class Entity {
      * @return True, if and only if the given property is present in this entity
      */
     public boolean hasProperty(String property) {
-        return dtClass.getFieldPathForName(property) != null;
+        return getDtClass().getFieldPathForName(property) != null;
     }
 
     /**
@@ -73,7 +75,7 @@ public class Entity {
 
     @SuppressWarnings("unchecked")
     public <T> T getProperty(String property) {
-        FieldPath fp = dtClass.getFieldPathForName(property);
+        FieldPath fp = getDtClass().getFieldPathForName(property);
         if (fp == null) {
             throw new IllegalArgumentException(String.format("property %s not found on entity of class %s", property, getDtClass().getDtName()));
         }
@@ -81,13 +83,13 @@ public class Entity {
     }
 
     public <T> T getPropertyForFieldPath(FieldPath fp) {
-        return (T) dtClass.getValueForFieldPath(fp, state);
+        return (T) getDtClass().getValueForFieldPath(fp, entityState().propertyState);
     }
 
     @Override
     public String toString() {
-        String title = "idx: " + index + ", serial: " + serial + ", class: " + dtClass.getDtName();
-        return dtClass.dumpState(title, state);
+        String title = "idx: " + index + ", serial: " + getSerial() + ", class: " + getDtClass().getDtName();
+        return getDtClass().dumpState(title, entityState().propertyState);
     }
 
 }

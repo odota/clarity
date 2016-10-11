@@ -9,7 +9,6 @@ import skadistats.clarity.event.Insert;
 import skadistats.clarity.event.InsertEvent;
 import skadistats.clarity.event.Provides;
 import skadistats.clarity.model.EngineType;
-import skadistats.clarity.model.Entity;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.OnInit;
 import skadistats.clarity.processor.sendtables.DTClasses;
@@ -50,7 +49,7 @@ public class TempEntities {
                 }
                 Object[] state = new Object[receiveProps.length];
                 fieldReader.readFields(stream, cls, state, false);
-                evTempEntity.raise(new Entity(engineType, 0, 0, cls, true, state));
+                // TODO evTempEntity.raise(new Entity(engineType, 0, 0, cls, true, state));
             }
         }
     }
