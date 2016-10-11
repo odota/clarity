@@ -1,6 +1,5 @@
 package skadistats.clarity.processor.entities;
 
-import skadistats.clarity.decoder.Util;
 import skadistats.clarity.model.EngineType;
 
 public class ClientFrame {
@@ -24,7 +23,7 @@ public class ClientFrame {
 
     public EntityState cloneState(ClientFrame otherFrame, int idx) {
         EntityState otherState = otherFrame != null ? otherFrame.state[idx] : null;
-        state[idx] = otherState != null ? Util.clone(otherState) : null;
+        state[idx] = otherState != null ? otherState.copy() : null;
         return state[idx];
     }
 

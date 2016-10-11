@@ -44,6 +44,10 @@ public abstract class Entity {
         return entityState() != null ? entityState().active : false;
     }
 
+    public boolean isValid() {
+        return clientFrame != null;
+    }
+
     public Object[] getState() {
         return entityState() != null ? entityState().propertyState : null;
     }

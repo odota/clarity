@@ -223,12 +223,12 @@ public class Entities {
                         log.debug("\tcreate entity: index: %4d, serial: %x class: %s", eIdx, serial, dtClass.getDtName());
                     }
 
-                    Object[] propertyState = Util.clone(getBaseline(eIdx, dtClassId, message.getBaseline()));
+                    Object[] propertyState = Util.cloneState(getBaseline(eIdx, dtClassId, message.getBaseline()));
                     fieldReader.readFields(stream, dtClass, propertyState, debug);
                     if (message.getUpdateBaseline()) {
                         Baseline baseline = baselines[eIdx][1 - message.getBaseline()];
                         baseline.dtClassId = dtClassId;
-                        baseline.propertyState = Util.clone(propertyState);
+                        baseline.propertyState = Util.cloneState(propertyState);
                     }
                     eState = new EntityState(dtClassId, serial, true, propertyState);
                     newFrame.setState(eState, eIdx);
@@ -278,7 +278,11 @@ public class Entities {
 
                 case 4:
                     // PRESERVE ENTITY
-                    newFrame.copyState(oldFrame, eIdx);
+                    if (oldFrame != null) {
+                        EntityState s = oldFrame.getState(eIdx);
+                        newFrame.setState(s, eIdx);
+                    }
+
                     break;
             }
 
@@ -365,12 +369,13 @@ public class Entities {
     }
 
     public Entity getByIndex(int index) {
-        return entities[index];
+        Entity entity = entities[index];
+        return entity.isValid() ? entity : null;
     }
 
     public Entity getByHandle(int handle) {
         Entity e = entities[engineType.indexForHandle(handle)];
-        return e == null || e.getSerial() != engineType.serialForHandle(handle) ? null : e;
+        return e.isValid() && e.getSerial() == engineType.serialForHandle(handle) ? e : null;
     }
 
     public Iterator<Entity> getAllByPredicate(final Predicate<Entity> predicate) {
@@ -380,7 +385,7 @@ public class Entities {
             public Entity readNext() {
                 while(++i < entities.length) {
                     Entity e = entities[i];
-                    if (e != null && predicate.apply(e)) {
+                    if (e.isValid() && predicate.apply(e)) {
                         return e;
                     }
                 }

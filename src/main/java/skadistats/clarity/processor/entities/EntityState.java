@@ -1,5 +1,7 @@
 package skadistats.clarity.processor.entities;
 
+import skadistats.clarity.decoder.Util;
+
 public class EntityState {
 
     public final int clsId;
@@ -14,4 +16,12 @@ public class EntityState {
         this.propertyState = propertyState;
     }
 
+    public EntityState copy() {
+        return new EntityState(
+                clsId,
+                serial,
+                active,
+                Util.cloneState(propertyState)
+        );
+    }
 }

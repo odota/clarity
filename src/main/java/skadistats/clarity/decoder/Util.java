@@ -47,6 +47,18 @@ public class Util {
         return CLONER.deepClone(src);
     }
 
+    public static Object[] cloneState(Object[] src) {
+        Object[] dst = new Object[src.length];
+        for (int i = 0; i < src.length; i++) {
+            if (src[i] instanceof Object[]) {
+                dst[i] = cloneState((Object[]) src[i]);
+            } else {
+                dst[i] = src[i];
+            }
+        }
+        return dst;
+    }
+
     public static String arrayIdxToString(int idx) {
         return String.format("%04d", idx);
     }
