@@ -14,5 +14,10 @@ public class LongUnsignedUnpacker implements Unpacker<Long> {
     public Long unpack(BitStream bs) {
         return bs.readUBitLong(nBits);
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 8;
+    }
+
 }

@@ -8,5 +8,10 @@ public class StringZeroTerminatedUnpacker implements Unpacker<String> {
     public String unpack(BitStream bs) {
         return bs.readString(Integer.MAX_VALUE);
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 64;
+    }
+
 }

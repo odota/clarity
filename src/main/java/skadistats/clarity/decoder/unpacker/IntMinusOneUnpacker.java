@@ -8,5 +8,10 @@ public class IntMinusOneUnpacker implements Unpacker<Integer> {
     public Integer unpack(BitStream bs) {
         return bs.readVarUInt() - 1;
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }

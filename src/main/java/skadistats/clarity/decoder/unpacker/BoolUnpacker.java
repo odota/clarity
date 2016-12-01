@@ -8,5 +8,10 @@ public class BoolUnpacker implements Unpacker<Boolean> {
     public Boolean unpack(BitStream bs) {
         return bs.readBitFlag();
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 1;
+    }
+
 }

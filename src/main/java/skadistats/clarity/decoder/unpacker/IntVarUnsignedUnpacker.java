@@ -8,5 +8,10 @@ public class IntVarUnsignedUnpacker implements Unpacker<Integer> {
     public Integer unpack(BitStream bs) {
         return bs.readVarUInt();
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }

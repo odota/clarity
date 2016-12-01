@@ -18,5 +18,10 @@ public class VectorXYUnpacker implements Unpacker<Vector> {
             floatUnpacker.unpack(bs)
         );
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 2 * floatUnpacker.sizeOfValue();
+    }
+
 }

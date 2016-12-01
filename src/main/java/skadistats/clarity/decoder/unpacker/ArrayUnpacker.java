@@ -22,5 +22,10 @@ public class ArrayUnpacker<T> implements Unpacker<T[]> {
         }
         return result;
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        throw new UnsupportedOperationException();
+    }
+
 }

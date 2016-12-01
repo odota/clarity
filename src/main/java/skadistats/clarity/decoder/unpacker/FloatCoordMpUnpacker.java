@@ -17,4 +17,9 @@ public class FloatCoordMpUnpacker implements Unpacker<Float> {
         return bs.readCoordMp(bs, integral, lowPrecision);
     }
 
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }
