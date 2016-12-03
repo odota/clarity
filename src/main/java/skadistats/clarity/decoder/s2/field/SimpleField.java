@@ -73,7 +73,7 @@ public class SimpleField extends Field {
     }
 
     @Override
-    public int computeRequiredSpace() {
+    public int sizeOf() {
         return unpacker.sizeOfValue();
     }
 

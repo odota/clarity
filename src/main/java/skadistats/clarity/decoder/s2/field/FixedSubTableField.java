@@ -106,7 +106,7 @@ public class FixedSubTableField extends Field {
     }
 
     @Override
-    public int computeRequiredSpace() {
-        return properties.getSerializer().computeRequiredSpace();
+    public int sizeOf() {
+        return properties.getSerializer().sizeOf();
     }
 }

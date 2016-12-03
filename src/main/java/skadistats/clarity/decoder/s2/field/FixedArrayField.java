@@ -102,7 +102,7 @@ public class FixedArrayField extends Field {
     }
 
     @Override
-    public int computeRequiredSpace() {
+    public int sizeOf() {
         return length * elementUnpacker.sizeOfValue();
     }
 

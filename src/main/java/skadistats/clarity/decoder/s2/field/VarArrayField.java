@@ -117,7 +117,7 @@ public class VarArrayField extends Field {
     }
 
     @Override
-    public int computeRequiredSpace() {
+    public int sizeOf() {
         return maxLength * elementUnpacker.sizeOfValue();
     }
 }

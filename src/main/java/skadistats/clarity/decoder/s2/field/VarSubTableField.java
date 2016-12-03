@@ -118,8 +118,8 @@ public class VarSubTableField extends Field {
     }
 
     @Override
-    public int computeRequiredSpace() {
-        return maxLength * properties.getSerializer().computeRequiredSpace();
+    public int sizeOf() {
+        return maxLength * properties.getSerializer().sizeOf();
     }
 
 }

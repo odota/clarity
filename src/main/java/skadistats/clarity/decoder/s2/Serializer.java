@@ -15,6 +15,8 @@ public class Serializer implements AddressLayoutable {
     private final SerializerId id;
     private final Field[] fields;
     private final Set<String> sendNodePrefixes;
+    private final int[] offsets;
+    private final int sizeOf;
 
     public Serializer(SerializerId id, Field[] fields) {
         this.id = id;
@@ -32,6 +34,14 @@ public class Serializer implements AddressLayoutable {
                 sendNodePrefixes.add(field.getProperties().getSendNode());
             }
         }
+
+        offsets = new int[fields.length];
+        int o = 0;
+        for (int i = 0; i < fields.length; i++) {
+            offsets[i] = o;
+            o += fields[i].sizeOf();
+        }
+        sizeOf = o;
     }
 
     public SerializerId getId() {
@@ -123,12 +133,8 @@ public class Serializer implements AddressLayoutable {
     }
 
     @Override
-    public int computeRequiredSpace() {
-        int c = 0;
-        for (int i = 0; i < fields.length; i++) {
-            c += fields[i].computeRequiredSpace();
-        }
-        return c;
+    public int sizeOf() {
+        return sizeOf;
     }
 
 }
