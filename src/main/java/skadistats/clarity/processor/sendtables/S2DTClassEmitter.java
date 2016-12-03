@@ -58,6 +58,11 @@ public class S2DTClassEmitter {
         ITEM_COUNTS.put("MAX_ABILITY_DRAFT_ABILITIES", 48);
     }
 
+    private static final Map<String, Integer> MAX_LENGTHS = new HashMap<>();
+    static {
+    }
+
+
     @Insert
     private Context ctx;
     @Insert
@@ -72,12 +77,17 @@ public class S2DTClassEmitter {
         return new FieldType(type);
     }
 
+    private int computeMaxLength(FieldProperties properties) {
+        Integer value = MAX_LENGTHS.get(properties.getName());
+        return value != null ? value : 10;
+    }
+
     private Field createField(FieldProperties properties) {
         if (properties.getSerializer() != null) {
             if (POINTERS.contains(properties.getType().getBaseType())) {
                 return new FixedSubTableField(properties);
             } else {
-                return new VarSubTableField(properties);
+                return new VarSubTableField(properties, computeMaxLength(properties));
             }
         }
         String elementCount = properties.getType().getElementCount();
@@ -89,7 +99,7 @@ public class S2DTClassEmitter {
             return new FixedArrayField(properties, countAsInt);
         }
         if ("CUtlVector".equals(properties.getType().getBaseType())) {
-            return new VarArrayField(properties);
+            return new VarArrayField(properties, computeMaxLength(properties));
         }
         return new SimpleField(properties);
     }
@@ -162,6 +172,7 @@ public class S2DTClassEmitter {
         }
 
         for (Serializer serializer : serializers.values()) {
+            System.out.format("%s: %s\n", serializer.getId(), serializer.computeRequiredSpace());
             DTClass dtClass = new S2DTClass(serializer);
             evDtClass.raise(dtClass);
         }

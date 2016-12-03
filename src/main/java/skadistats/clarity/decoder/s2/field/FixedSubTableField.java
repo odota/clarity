@@ -103,6 +103,10 @@ public class FixedSubTableField extends Field {
             properties.getSerializer().collectFieldPaths(fp, entries, subState);
             fp.last--;
         }
+    }
 
+    @Override
+    public int computeRequiredSpace() {
+        return properties.getSerializer().computeRequiredSpace();
     }
 }

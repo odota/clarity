@@ -101,4 +101,9 @@ public class FixedArrayField extends Field {
         fp.last--;
     }
 
+    @Override
+    public int computeRequiredSpace() {
+        return length * elementUnpacker.sizeOfValue();
+    }
+
 }

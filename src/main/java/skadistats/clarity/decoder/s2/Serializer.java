@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Serializer {
+public class Serializer implements AddressLayoutable {
 
     private final SerializerId id;
     private final Field[] fields;
@@ -122,5 +122,13 @@ public class Serializer {
         }
     }
 
+    @Override
+    public int computeRequiredSpace() {
+        int c = 0;
+        for (int i = 0; i < fields.length; i++) {
+            c += fields[i].computeRequiredSpace();
+        }
+        return c;
+    }
 
 }

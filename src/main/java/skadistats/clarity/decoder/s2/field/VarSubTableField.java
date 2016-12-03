@@ -10,10 +10,12 @@ import java.util.List;
 
 public class VarSubTableField extends Field {
 
+    private final int maxLength;
     private final Unpacker baseUnpacker;
 
-    public VarSubTableField(FieldProperties properties) {
+    public VarSubTableField(FieldProperties properties, int maxLength) {
         super(properties);
+        this.maxLength = maxLength;
         baseUnpacker = S2UnpackerFactory.createUnpacker(properties, "uint32");
     }
 
@@ -113,6 +115,11 @@ public class VarSubTableField extends Field {
             }
             fp.last -= 2;
         }
+    }
+
+    @Override
+    public int computeRequiredSpace() {
+        return maxLength * properties.getSerializer().computeRequiredSpace();
     }
 
 }

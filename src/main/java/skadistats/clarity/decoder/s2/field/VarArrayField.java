@@ -11,11 +11,13 @@ import java.util.List;
 
 public class VarArrayField extends Field {
 
+    private final int maxLength;
     private final Unpacker baseUnpacker;
     private final Unpacker elementUnpacker;
 
-    public VarArrayField(FieldProperties properties) {
+    public VarArrayField(FieldProperties properties, int maxLength) {
         super(properties);
+        this.maxLength = maxLength;
         baseUnpacker = S2UnpackerFactory.createUnpacker(properties, "uint32");
         elementUnpacker = S2UnpackerFactory.createUnpacker(properties, properties.getType().getGenericType().getBaseType());
     }
@@ -112,6 +114,10 @@ public class VarArrayField extends Field {
             }
         }
         fp.last--;
+    }
 
+    @Override
+    public int computeRequiredSpace() {
+        return maxLength * elementUnpacker.sizeOfValue();
     }
 }

@@ -71,4 +71,10 @@ public class SimpleField extends Field {
     public void collectFieldPaths(FieldPath fp, List<FieldPath> entries, Object[] state) {
         entries.add(new FieldPath(fp));
     }
+
+    @Override
+    public int computeRequiredSpace() {
+        return unpacker.sizeOfValue();
+    }
+
 }
