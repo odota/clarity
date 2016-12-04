@@ -3,29 +3,13 @@ package skadistats.clarity.decoder.bitstream;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.ZeroCopy;
 import skadistats.clarity.ClarityException;
-import skadistats.clarity.decoder.Util;
+import skadistats.clarity.Platform;
 import sun.misc.Unsafe;
-
-import java.lang.reflect.Constructor;
 
 public abstract class UnsafeBitStreamBase extends BitStream {
 
-    protected static final Unsafe unsafe;
-    protected static final long base;
-
-    static {
-        Unsafe u = null;
-        try {
-            Constructor<Unsafe> unsafeConstructor = Unsafe.class.getDeclaredConstructor();
-            unsafeConstructor.setAccessible(true);
-            u = unsafeConstructor.newInstance();
-        } catch (Exception e) {
-            Util.uncheckedThrow(e);
-        }
-        unsafe = u;
-        base = unsafe.arrayBaseOffset(byte[].class);
-    }
-
+    protected static final Unsafe unsafe = Platform.getUnsafe();
+    protected static final long base = Platform.getUnsafe().arrayBaseOffset(byte[].class);
     protected final byte[] data;
     protected final long bound;
 
