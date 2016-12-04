@@ -2,6 +2,7 @@ package skadistats.clarity.decoder.s1;
 
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 
 import java.util.ArrayList;
@@ -112,8 +113,9 @@ public class S1DTClass implements DTClass {
         .build();
 
     @Override
-    public String dumpState(String title, Object[] state) {
+    public String dumpState(String title, EntityState entityState) {
         DEBUG_LOCK.lock();
+        Object[] state = entityState.getState();
         try {
             DEBUG_DUMPER.clear();
             DEBUG_DUMPER.setTitle(title);

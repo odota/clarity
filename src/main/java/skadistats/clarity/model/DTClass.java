@@ -1,5 +1,7 @@
 package skadistats.clarity.model;
 
+import skadistats.clarity.model.state.EntityState;
+
 import java.util.List;
 
 public interface DTClass {
@@ -17,7 +19,8 @@ public interface DTClass {
     <T> T getValueForFieldPath(FieldPath fp, Object[] state);
 
     List<FieldPath> collectFieldPaths(Object[] state);
-    String dumpState(String title, Object[] state);
+
+    String dumpState(String title, EntityState state);
 
 }
 

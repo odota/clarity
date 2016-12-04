@@ -5,6 +5,7 @@ import skadistats.clarity.decoder.s2.field.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 
 import java.util.ArrayList;
@@ -99,10 +100,10 @@ public class S2DTClass implements DTClass {
         .build();
 
     @Override
-    public String dumpState(String title, Object[] state) {
+    public String dumpState(String title, EntityState state) {
         FieldPath fp = new FieldPath();
         List<DumpEntry> entries = new ArrayList<>();
-        serializer.collectDump(fp, "", entries, state);
+        serializer.collectDump(fp, "", entries, state.getState());
         DEBUG_LOCK.lock();
         try {
             DEBUG_DUMPER.clear();

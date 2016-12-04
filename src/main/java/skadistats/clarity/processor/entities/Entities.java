@@ -16,6 +16,7 @@ import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.EngineType;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.StringTable;
+import skadistats.clarity.model.state.NestedArrayState;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.reader.OnReset;
 import skadistats.clarity.processor.reader.ResetPhase;
@@ -125,7 +126,7 @@ public class Entities {
                     }
                     state = Util.clone(getBaseline(cls.getClassId()));
                     fieldReader.readFields(stream, cls, state, debug);
-                    entity = new Entity(engineType, entityIndex, serial, cls, true, state);
+                    entity = new Entity(engineType, entityIndex, serial, cls, true, new NestedArrayState(cls, state));
                     entities[entityIndex] = entity;
                     evCreated.raise(entity);
                     evEntered.raise(entity);
@@ -135,7 +136,7 @@ public class Entities {
                         throw new ClarityException("entity at index %d was not found for update.", entityIndex);
                     }
                     cls = entity.getDtClass();
-                    state = entity.getState();
+                    state = entity.getState().getState();
                     int nChanged = fieldReader.readFields(stream, cls, state, debug);
                     evUpdated.raise(entity, fieldReader.getFieldPaths(), nChanged);
                     if (!entity.isActive()) {
