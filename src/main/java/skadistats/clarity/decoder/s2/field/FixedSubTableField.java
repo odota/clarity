@@ -4,17 +4,44 @@ import skadistats.clarity.decoder.s2.DumpEntry;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
-import skadistats.clarity.model.state.Addressable;
+import skadistats.clarity.model.state.Accessor;
 
 import java.util.List;
 
 public class FixedSubTableField extends Field {
 
+    private final FieldType baseType;
     private final Unpacker baseUnpacker;
+
+    private final Accessor accessor;
 
     public FixedSubTableField(FieldProperties properties) {
         super(properties);
-        baseUnpacker = S2UnpackerFactory.createUnpacker(properties, "bool");
+
+        baseType = new FieldType("bool");
+        baseUnpacker = S2UnpackerFactory.createUnpacker(properties, baseType.getBaseType());
+
+        accessor = new Accessor() {
+            @Override
+            public Unpacker getUnpacker() {
+                return baseUnpacker;
+            }
+
+            @Override
+            public FieldType getType() {
+                return baseType;
+            }
+
+            @Override
+            public Accessor getAccessor(int i) {
+                return getProperties().getSerializer().getAccessor(i);
+            }
+        };
+    }
+
+    @Override
+    public Accessor getAccessor() {
+        return accessor;
     }
 
     @Override
@@ -104,11 +131,6 @@ public class FixedSubTableField extends Field {
             properties.getSerializer().collectFieldPaths(fp, entries, subState);
             fp.last--;
         }
-    }
-
-    @Override
-    public Addressable getSubAddressable(int i) {
-        return properties.getSerializer().getSubAddressable(i);
     }
 
 }

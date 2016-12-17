@@ -16,6 +16,7 @@ import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.EngineType;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.StringTable;
+import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.model.state.NestedArrayState;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.reader.OnReset;
@@ -38,6 +39,9 @@ import java.util.Map;
 public class Entities {
 
     private static final Logger log = PrintfLoggerFactory.getLogger(LogChannel.entities);
+
+    private static final boolean DEBUG_ENTITY = false;
+    private static final boolean DEBUG_BASELINE = false;
 
     private final Map<Integer, BaselineEntry> baselineEntries = new HashMap<>();
     private Entity[] entities;
@@ -64,7 +68,7 @@ public class Entities {
 
     private class BaselineEntry {
         private ByteString rawBaseline;
-        private Object[] baseline;
+        private NestedArrayState baseline;
 
         public BaselineEntry(ByteString rawBaseline) {
             this.rawBaseline = rawBaseline;
@@ -104,10 +108,8 @@ public class Entities {
         int clsId;
         DTClass cls;
         int serial;
-        Object[] state;
+        EntityState state;
         Entity entity;
-
-        boolean debug = false;
 
         while (updateCount-- != 0) {
             entityIndex += stream.readUBitVar() + 1;
@@ -124,9 +126,9 @@ public class Entities {
                         // TODO: there is an extra VarInt encoded here for S2, figure out what it is
                         stream.readVarUInt();
                     }
-                    state = Util.clone(getBaseline(cls.getClassId()));
-                    fieldReader.readFields(stream, cls, state, debug);
-                    entity = new Entity(engineType, entityIndex, serial, cls, true, new NestedArrayState(cls, state));
+                    state = getBaseline(cls.getClassId()).copy();
+                    fieldReader.readFields(stream, cls, state, DEBUG_ENTITY);
+                    entity = new Entity(engineType, entityIndex, serial, cls, true, state);
                     entities[entityIndex] = entity;
                     evCreated.raise(entity);
                     evEntered.raise(entity);
@@ -136,8 +138,8 @@ public class Entities {
                         throw new ClarityException("entity at index %d was not found for update.", entityIndex);
                     }
                     cls = entity.getDtClass();
-                    state = entity.getState().getState();
-                    int nChanged = fieldReader.readFields(stream, cls, state, debug);
+                    state = entity.getState();
+                    int nChanged = fieldReader.readFields(stream, cls, state, DEBUG_ENTITY);
                     evUpdated.raise(entity, fieldReader.getFieldPaths(), nChanged);
                     if (!entity.isActive()) {
                         entity.setActive(true);
@@ -184,7 +186,7 @@ public class Entities {
 
     }
 
-    private Object[] getBaseline(int clsId) {
+    private EntityState getBaseline(int clsId) {
         BaselineEntry be = baselineEntries.get(clsId);
         if (be == null) {
             throw new ClarityException("Baseline for class %s (%d) not found.", dtClasses.forClassId(clsId).getDtName(), clsId);
@@ -192,8 +194,8 @@ public class Entities {
         if (be.baseline == null) {
             DTClass cls = dtClasses.forClassId(clsId);
             BitStream stream = BitStream.createBitStream(be.rawBaseline);
-            be.baseline = cls.getEmptyStateArray();
-            fieldReader.readFields(stream, cls, be.baseline, false);
+            be.baseline = new NestedArrayState(cls, cls.getEmptyStateArray());
+            fieldReader.readFields(stream, cls, be.baseline, DEBUG_BASELINE);
         }
         return be.baseline;
     }

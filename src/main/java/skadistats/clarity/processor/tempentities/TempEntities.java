@@ -49,16 +49,17 @@ public class TempEntities {
                     cls = (S1DTClass) dtClasses.forClassId(stream.readUBitInt(dtClasses.getClassBits()) - 1);
                     receiveProps = cls.getReceiveProps();
                 }
-                Object[] state = new Object[receiveProps.length];
-                fieldReader.readFields(stream, cls, state, false);
-                evTempEntity.raise(new Entity(
-                        engineType,
-                        0,
-                        0,
-                        cls,
-                        true,
-                        new NestedArrayState(cls, state))
-                );
+                // TODO
+//                Object[] state = new Object[receiveProps.length];
+//                fieldReader.readFields(stream, cls, state, false);
+//                evTempEntity.raise(new Entity(
+//                        engineType,
+//                        0,
+//                        0,
+//                        cls,
+//                        true,
+//                        new NestedArrayState(cls, state))
+//                );
             }
         }
     }

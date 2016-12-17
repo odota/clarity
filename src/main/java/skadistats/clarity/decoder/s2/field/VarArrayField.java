@@ -6,19 +6,68 @@ import skadistats.clarity.decoder.s2.DumpEntry;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
-import skadistats.clarity.model.state.Addressable;
+import skadistats.clarity.model.state.Accessor;
 
 import java.util.List;
 
 public class VarArrayField extends Field {
 
+    private final FieldType baseType;
     private final Unpacker baseUnpacker;
+
+    private final FieldType elementType;
     private final Unpacker elementUnpacker;
+
+    private final Accessor elementAccessor;
+    private final Accessor accessor;
 
     public VarArrayField(FieldProperties properties) {
         super(properties);
-        baseUnpacker = S2UnpackerFactory.createUnpacker(properties, "uint32");
-        elementUnpacker = S2UnpackerFactory.createUnpacker(properties, properties.getType().getGenericType().getBaseType());
+
+        baseType = new FieldType("uint32");
+        baseUnpacker = S2UnpackerFactory.createUnpacker(properties, baseType.getBaseType());
+
+        elementType = new FieldType(properties.getType().getBaseType());
+        elementUnpacker = S2UnpackerFactory.createUnpacker(properties, elementType.getBaseType());
+
+        elementAccessor = new Accessor() {
+            @Override
+            public Unpacker getUnpacker() {
+                return elementUnpacker;
+            }
+
+            @Override
+            public FieldType getType() {
+                return elementType;
+            }
+
+            @Override
+            public Accessor getAccessor(int i) {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        accessor = new Accessor() {
+            @Override
+            public Unpacker getUnpacker() {
+                return baseUnpacker;
+            }
+
+            @Override
+            public FieldType getType() {
+                return baseType;
+            }
+
+            @Override
+            public Accessor getAccessor(int i) {
+                return elementAccessor;
+            }
+        };
+    }
+
+    @Override
+    public Accessor getAccessor() {
+        return accessor;
     }
 
     @Override
@@ -113,11 +162,6 @@ public class VarArrayField extends Field {
             }
         }
         fp.last--;
-    }
-
-    @Override
-    public Addressable getSubAddressable(int i) {
-        return Addressable.LAST;
     }
 
 }

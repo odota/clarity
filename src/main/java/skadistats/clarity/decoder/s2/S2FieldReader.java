@@ -7,6 +7,8 @@ import skadistats.clarity.decoder.s2.field.FieldProperties;
 import skadistats.clarity.decoder.s2.field.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.Cursor;
+import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 
 public class S2FieldReader extends FieldReader<S2DTClass> {
@@ -38,7 +40,7 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
         .build();
 
     @Override
-    public int readFields(BitStream bs, S2DTClass dtClass, Object[] state, boolean debug) {
+    public int readFields(BitStream bs, S2DTClass dtClass, EntityState state, boolean debug) {
         try {
             if (debug) {
                 dataDebugTable.setTitle(dtClass.toString());
@@ -47,40 +49,40 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
             }
 
             int n = 0;
-            FieldPath fp = new FieldPath();
+            Cursor c = state.emptyCursor();
             while (true) {
                 int offsBefore = bs.pos();
                 FieldOpType op = bs.readFieldOp();
-                op.execute(fp, bs);
+                op.applyTo(c, bs);
                 if (debug) {
                     opDebugTable.setData(n, 0, op);
-                    opDebugTable.setData(n, 1, fp);
+                    opDebugTable.setData(n, 1, c.getFieldPath());
                     opDebugTable.setData(n, 2, bs.pos() - offsBefore);
                     opDebugTable.setData(n, 3, bs.toString(offsBefore, bs.pos()));
                 }
                 if (op == FieldOpType.FieldPathEncodeFinish) {
                     break;
                 }
-                fieldPaths[n++] = fp;
-                fp = new FieldPath(fp);
+                cursors[n++] = c;
+                c = c.copy();
             }
 
             for (int r = 0; r < n; r++) {
-                fp = fieldPaths[r];
-                Unpacker unpacker = dtClass.getUnpackerForFieldPath(fp);
+                c = cursors[r];
+                Unpacker unpacker = c.getUnpacker();
                 if (unpacker == null) {
-                    FieldProperties f = dtClass.getFieldForFieldPath(fp).getProperties();
-                    throw new ClarityException("no unpacker for field %s with type %s!", f.getName(), f.getType());
+                    throw new ClarityException("no unpacker for field %s with type %s!", c.getFieldPath(), c.getType());
                 }
                 int offsBefore = bs.pos();
                 Object data = unpacker.unpack(bs);
-                dtClass.setValueForFieldPath(fp, state, data);
+                c.setValue(data);
 
                 if (debug) {
+                    FieldPath fp = c.getFieldPath();
                     FieldProperties props = dtClass.getFieldForFieldPath(fp).getProperties();
                     FieldType type = dtClass.getTypeForFieldPath(fp);
                     dataDebugTable.setData(r, 0, fp);
-                    dataDebugTable.setData(r, 1, dtClass.getNameForFieldPath(fp));
+                    dataDebugTable.setData(r, 1, dtClass.getNameForFieldPath(c.getFieldPath()));
                     dataDebugTable.setData(r, 2, props.getLowValue());
                     dataDebugTable.setData(r, 3, props.getHighValue());
                     dataDebugTable.setData(r, 4, props.getBitCount());

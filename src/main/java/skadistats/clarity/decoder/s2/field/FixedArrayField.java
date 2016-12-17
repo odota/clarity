@@ -6,19 +6,64 @@ import skadistats.clarity.decoder.s2.DumpEntry;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
-import skadistats.clarity.model.state.Addressable;
+import skadistats.clarity.model.state.Accessor;
 
 import java.util.List;
 
 public class FixedArrayField extends Field {
 
     private final int length;
+
+    private final FieldType elementType;
     private final Unpacker elementUnpacker;
+
+    private final Accessor elementAccessor;
+    private final Accessor accessor;
 
     public FixedArrayField(FieldProperties properties, int length) {
         super(properties);
         this.length = length;
-        elementUnpacker = S2UnpackerFactory.createUnpacker(properties, properties.getType().getBaseType());
+
+        elementType = new FieldType(properties.getType().getBaseType());
+        elementUnpacker = S2UnpackerFactory.createUnpacker(properties, elementType.getBaseType());
+        elementAccessor = new Accessor() {
+            @Override
+            public Unpacker getUnpacker() {
+                return elementUnpacker;
+            }
+
+            @Override
+            public FieldType getType() {
+                return elementType;
+            }
+
+            @Override
+            public Accessor getAccessor(int i) {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        accessor = new Accessor() {
+            @Override
+            public Unpacker getUnpacker() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public FieldType getType() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public Accessor getAccessor(int i) {
+                return elementAccessor;
+            }
+        };
+    }
+
+    @Override
+    public Accessor getAccessor() {
+        return accessor;
     }
 
     @Override
@@ -100,11 +145,6 @@ public class FixedArrayField extends Field {
             }
         }
         fp.last--;
-    }
-
-    @Override
-    public Addressable getSubAddressable(int i) {
-        return Addressable.LAST;
     }
 
 }

@@ -17,6 +17,12 @@ public class FieldPath implements Comparable<FieldPath> {
         System.arraycopy(elements, 0, path, 0, last + 1);
     }
 
+    public FieldPath(int[] elements, int first, int n) {
+        path = new int[6];
+        this.last = n - 1;
+        System.arraycopy(elements, first, path, 0, n);
+    }
+
 
     public FieldPath(FieldPath other) {
         path = new int[6];

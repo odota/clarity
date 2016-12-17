@@ -4,14 +4,15 @@ import skadistats.clarity.decoder.s2.field.Field;
 import skadistats.clarity.decoder.s2.field.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
-import skadistats.clarity.model.state.Addressable;
+import skadistats.clarity.model.state.Accessor;
+import skadistats.clarity.model.state.AccessorFactory;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Serializer implements Addressable {
+public class Serializer implements AccessorFactory {
 
     private final SerializerId id;
     private final Field[] fields;
@@ -124,8 +125,7 @@ public class Serializer implements Addressable {
     }
 
     @Override
-    public Addressable getSubAddressable(int i) {
-        return fields[i];
+    public Accessor getAccessor(int i) {
+        return fields[i].getAccessor();
     }
-
 }

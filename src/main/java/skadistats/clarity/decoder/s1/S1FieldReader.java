@@ -2,8 +2,9 @@ package skadistats.clarity.decoder.s1;
 
 import skadistats.clarity.decoder.FieldReader;
 import skadistats.clarity.decoder.bitstream.BitStream;
-import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.s1.PropFlag;
+import skadistats.clarity.model.state.Cursor;
+import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 
 public class S1FieldReader extends FieldReader<S1DTClass> {
@@ -24,7 +25,8 @@ public class S1FieldReader extends FieldReader<S1DTClass> {
         .build();
 
     @Override
-    public int readFields(BitStream bs, S1DTClass dtClass, Object[] state, boolean debug) {
+    public int readFields(BitStream bs, S1DTClass dtClass, EntityState entityState, boolean debug) {
+        Object[] state = entityState.getState();
         try {
             if (debug) {
                 debugTable.setTitle(dtClass.getDtName());
@@ -44,13 +46,15 @@ public class S1FieldReader extends FieldReader<S1DTClass> {
                         cursor += offset + 1;
                     }
                 }
-                fieldPaths[n++] = new FieldPath(dtClass.getIndexMapping()[cursor]);
+                Cursor c = entityState.emptyCursor();
+                c.add(dtClass.getIndexMapping()[cursor]);
+                cursors[n++] = c;
             }
 
             ReceiveProp[] receiveProps = dtClass.getReceiveProps();
             for (int ci = 0; ci < n; ci++) {
                 int offsBefore = bs.pos();
-                int o = fieldPaths[ci].path[0];
+                int o = cursors[ci].getFieldPath().path[0];
                 state[o] = receiveProps[o].decode(bs);
 
                 if (debug) {
