@@ -3,10 +3,11 @@ package skadistats.clarity.decoder.s2.field;
 import skadistats.clarity.decoder.s2.DumpEntry;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.Addressable;
 
 import java.util.List;
 
-public abstract class Field {
+public abstract class Field implements Addressable {
 
     protected final FieldProperties properties;
 

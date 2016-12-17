@@ -4,6 +4,7 @@ import skadistats.clarity.decoder.s2.DumpEntry;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.Addressable;
 
 import java.util.List;
 
@@ -103,6 +104,11 @@ public class FixedSubTableField extends Field {
             properties.getSerializer().collectFieldPaths(fp, entries, subState);
             fp.last--;
         }
-
     }
+
+    @Override
+    public Addressable getSubAddressable(int i) {
+        return properties.getSerializer().getSubAddressable(i);
+    }
+
 }

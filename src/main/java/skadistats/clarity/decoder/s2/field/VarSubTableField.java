@@ -5,6 +5,7 @@ import skadistats.clarity.decoder.s2.DumpEntry;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.Addressable;
 
 import java.util.List;
 
@@ -115,4 +116,13 @@ public class VarSubTableField extends Field {
         }
     }
 
+    @Override
+    public Addressable getSubAddressable(int i) {
+        return new Addressable() {
+            @Override
+            public Addressable getSubAddressable(int i) {
+                return properties.getSerializer().getSubAddressable(i);
+            }
+        };
+    }
 }

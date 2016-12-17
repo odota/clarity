@@ -4,6 +4,7 @@ import skadistats.clarity.decoder.s2.DumpEntry;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.Addressable;
 
 import java.util.List;
 
@@ -71,4 +72,10 @@ public class SimpleField extends Field {
     public void collectFieldPaths(FieldPath fp, List<FieldPath> entries, Object[] state) {
         entries.add(new FieldPath(fp));
     }
+
+    @Override
+    public Addressable getSubAddressable(int i) {
+        throw new UnsupportedOperationException();
+    }
+
 }
