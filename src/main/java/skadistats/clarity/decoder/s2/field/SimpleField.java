@@ -26,11 +26,6 @@ public class SimpleField extends Field {
             public FieldType getType() {
                 return getProperties().getType();
             }
-
-            @Override
-            public Accessor getAccessor(int i) {
-                throw new UnsupportedOperationException();
-            }
         };
     }
 

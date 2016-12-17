@@ -77,17 +77,6 @@ public class NestedArrayState implements EntityState {
         }
 
         @Override
-        public <T> T getValue() {
-            // TODO
-            return null;
-        }
-
-        @Override
-        public void setValue(Object data) {
-            // TODO
-        }
-
-        @Override
         public int getDepth() {
             return last + 1;
         }
@@ -116,6 +105,17 @@ public class NestedArrayState implements EntityState {
             i += idx[last];
             field[last] = prev.getAccessor(i);
             idx[last] = i;
+        }
+
+        @Override
+        public <T> T getValue() {
+            // TODO
+            return null;
+        }
+
+        @Override
+        public void setValue(Object data) {
+            // TODO
         }
 
         @Override

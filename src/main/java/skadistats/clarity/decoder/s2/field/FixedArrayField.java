@@ -31,29 +31,13 @@ public class FixedArrayField extends Field {
             public Unpacker getUnpacker() {
                 return elementUnpacker;
             }
-
             @Override
             public FieldType getType() {
                 return elementType;
             }
-
-            @Override
-            public Accessor getAccessor(int i) {
-                throw new UnsupportedOperationException();
-            }
         };
 
         accessor = new Accessor() {
-            @Override
-            public Unpacker getUnpacker() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public FieldType getType() {
-                throw new UnsupportedOperationException();
-            }
-
             @Override
             public Accessor getAccessor(int i) {
                 return elementAccessor;

@@ -35,15 +35,9 @@ public class VarArrayField extends Field {
             public Unpacker getUnpacker() {
                 return elementUnpacker;
             }
-
             @Override
             public FieldType getType() {
                 return elementType;
-            }
-
-            @Override
-            public Accessor getAccessor(int i) {
-                throw new UnsupportedOperationException();
             }
         };
 
@@ -52,12 +46,10 @@ public class VarArrayField extends Field {
             public Unpacker getUnpacker() {
                 return baseUnpacker;
             }
-
             @Override
             public FieldType getType() {
                 return baseType;
             }
-
             @Override
             public Accessor getAccessor(int i) {
                 return elementAccessor;

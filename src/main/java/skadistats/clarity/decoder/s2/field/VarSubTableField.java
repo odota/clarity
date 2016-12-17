@@ -28,12 +28,10 @@ public class VarSubTableField extends Field {
             public Unpacker getUnpacker() {
                 throw new UnsupportedOperationException();
             }
-
             @Override
             public FieldType getType() {
                 throw new UnsupportedOperationException();
             }
-
             @Override
             public Accessor getAccessor(int i) {
                 return getProperties().getSerializer().getAccessor(i);
@@ -45,12 +43,10 @@ public class VarSubTableField extends Field {
             public Unpacker getUnpacker() {
                 return baseUnpacker;
             }
-
             @Override
             public FieldType getType() {
                 return baseType;
             }
-
             @Override
             public Accessor getAccessor(int i) {
                 return elementAccessor;

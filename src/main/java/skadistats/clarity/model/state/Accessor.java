@@ -3,9 +3,19 @@ package skadistats.clarity.model.state;
 import skadistats.clarity.decoder.s2.field.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 
-public interface Accessor extends AccessorFactory {
+public class Accessor implements AccessorFactory {
 
-    Unpacker getUnpacker();
-    FieldType getType();
+    public Unpacker getUnpacker() {
+        throw new UnsupportedOperationException();
+    }
+
+    public FieldType getType() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Accessor getAccessor(int i) {
+        throw new UnsupportedOperationException();
+    }
 
 }

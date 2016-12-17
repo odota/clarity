@@ -26,12 +26,10 @@ public class FixedSubTableField extends Field {
             public Unpacker getUnpacker() {
                 return baseUnpacker;
             }
-
             @Override
             public FieldType getType() {
                 return baseType;
             }
-
             @Override
             public Accessor getAccessor(int i) {
                 return getProperties().getSerializer().getAccessor(i);
