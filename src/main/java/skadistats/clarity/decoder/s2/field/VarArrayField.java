@@ -24,10 +24,10 @@ public class VarArrayField extends Field {
     public VarArrayField(FieldProperties properties) {
         super(properties);
 
-        baseType = new FieldType("uint32");
+        baseType = FieldType.forString("uint32");
         baseUnpacker = S2UnpackerFactory.createUnpacker(properties, baseType.getBaseType());
 
-        elementType = new FieldType(properties.getType().getBaseType());
+        elementType = FieldType.forString(properties.getType().getBaseType());
         elementUnpacker = S2UnpackerFactory.createUnpacker(properties, elementType.getBaseType());
 
         elementAccessor = new Accessor() {

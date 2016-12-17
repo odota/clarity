@@ -24,7 +24,7 @@ public class FixedArrayField extends Field {
         super(properties);
         this.length = length;
 
-        elementType = new FieldType(properties.getType().getBaseType());
+        elementType = FieldType.forString(properties.getType().getBaseType());
         elementUnpacker = S2UnpackerFactory.createUnpacker(properties, elementType.getBaseType());
         elementAccessor = new Accessor() {
             @Override

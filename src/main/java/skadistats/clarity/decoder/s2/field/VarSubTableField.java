@@ -20,7 +20,7 @@ public class VarSubTableField extends Field {
     public VarSubTableField(FieldProperties properties) {
         super(properties);
 
-        baseType = new FieldType("uint32");
+        baseType = FieldType.forString("uint32");
         baseUnpacker = S2UnpackerFactory.createUnpacker(properties, baseType.getBaseType());
 
         elementAccessor = new Accessor() {

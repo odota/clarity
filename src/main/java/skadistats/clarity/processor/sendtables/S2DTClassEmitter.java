@@ -68,10 +68,6 @@ public class S2DTClassEmitter {
     @InsertEvent
     private Event<OnDTClass> evDtClass;
 
-    private FieldType createFieldType(String type) {
-        return new FieldType(type);
-    }
-
     private Field createField(FieldProperties properties) {
         if (properties.getSerializer() != null) {
             if (POINTERS.contains(properties.getType().getBaseType())) {
@@ -107,7 +103,6 @@ public class S2DTClassEmitter {
     @OnMessage(S2NetMessages.CSVCMsg_FlattenedSerializer.class)
     public void onFlattenedSerializers(S2NetMessages.CSVCMsg_FlattenedSerializer protoMessage) throws IOException {
         Map<SerializerId, Serializer> serializers = new HashMap<>();
-        Map<String, FieldType> fieldTypes = new HashMap<>();
         Field[] fields = new Field[protoMessage.getFieldsCount()];
         ArrayList<Field> currentFields = new ArrayList<>(128);
         for (int si = 0; si < protoMessage.getSerializersCount(); si++) {
@@ -122,11 +117,7 @@ public class S2DTClassEmitter {
                             patchEntry.getValue().execute(protoField);
                         }
                     }
-                    FieldType fieldType = fieldTypes.get(protoField.varType);
-                    if (fieldType == null) {
-                        fieldType = createFieldType(protoField.varType);
-                        fieldTypes.put(protoField.varType, fieldType);
-                    }
+                    FieldType fieldType = FieldType.forString(protoField.varType);
                     Serializer fieldSerializer = null;
                     if (protoField.serializerName != null) {
                         fieldSerializer = serializers.get(

@@ -18,7 +18,7 @@ public class FixedSubTableField extends Field {
     public FixedSubTableField(FieldProperties properties) {
         super(properties);
 
-        baseType = new FieldType("bool");
+        baseType = FieldType.forString("bool");
         baseUnpacker = S2UnpackerFactory.createUnpacker(properties, baseType.getBaseType());
 
         accessor = new Accessor() {
