@@ -4,35 +4,17 @@ import skadistats.clarity.decoder.s2.field.Field;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.state.Accessor;
 import skadistats.clarity.model.state.AccessorFactory;
-import skadistats.clarity.model.state.DumpEntry;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class Serializer implements AccessorFactory {
 
     private final SerializerId id;
     private final Field[] fields;
-    private final Set<String> sendNodePrefixes;
 
     public Serializer(SerializerId id, Field[] fields) {
         this.id = id;
         this.fields = fields;
-
-        sendNodePrefixes = new TreeSet<>(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                int result = Integer.compare(o2.length(), o1.length());
-                return result != 0 ? result : o1.compareTo(o2);
-            }
-        });
-        for (Field field : fields) {
-            if (field.getProperties().getSendNode() != null) {
-                sendNodePrefixes.add(field.getProperties().getSendNode());
-            }
-        }
     }
 
     public SerializerId getId() {
@@ -69,11 +51,6 @@ public class Serializer implements AccessorFactory {
     }
 
     public FieldPath getFieldPathForName(FieldPath fp, String property) {
-//        for (String sendNodePrefix : sendNodePrefixes) {
-//            if (property.length() > sendNodePrefix.length() && property.startsWith(sendNodePrefix)) {
-//                return getFieldPathForNameInternal(fp, property.substring(sendNodePrefix.length() + 1));
-//            }
-//        }
         return getFieldPathForNameInternal(fp, property);
     }
 
