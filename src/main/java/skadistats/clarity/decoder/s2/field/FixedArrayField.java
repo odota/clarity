@@ -39,8 +39,16 @@ public class FixedArrayField extends Field {
 
         accessor = new Accessor() {
             @Override
-            public Accessor getAccessor(int i) {
+            public Accessor getSubAccessor(int i) {
                 return elementAccessor;
+            }
+            @Override
+            public Integer getSubStateLength() {
+                return FixedArrayField.this.length;
+            }
+            @Override
+            public Integer getElementNum(int i) {
+                return i;
             }
         };
     }

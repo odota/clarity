@@ -51,7 +51,7 @@ public class VarArrayField extends Field {
                 return baseType;
             }
             @Override
-            public Accessor getAccessor(int i) {
+            public Accessor getSubAccessor(int i) {
                 return elementAccessor;
             }
         };

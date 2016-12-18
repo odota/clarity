@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import skadistats.clarity.ClarityException;
 import skadistats.clarity.LogChannel;
 import skadistats.clarity.decoder.FieldReader;
-import skadistats.clarity.decoder.Util;
 import skadistats.clarity.decoder.bitstream.BitStream;
 import skadistats.clarity.event.Event;
 import skadistats.clarity.event.Insert;
@@ -194,7 +193,7 @@ public class Entities {
         if (be.baseline == null) {
             DTClass cls = dtClasses.forClassId(clsId);
             BitStream stream = BitStream.createBitStream(be.rawBaseline);
-            be.baseline = new NestedArrayState(cls, cls.getEmptyStateArray());
+            be.baseline = new NestedArrayState(cls);
             fieldReader.readFields(stream, cls, be.baseline, DEBUG_BASELINE);
         }
         return be.baseline;

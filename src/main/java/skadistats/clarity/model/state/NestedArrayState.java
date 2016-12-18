@@ -10,34 +10,32 @@ import skadistats.clarity.model.FieldPath;
 public class NestedArrayState implements EntityState {
 
     private final DTClass dtClass;
-    private final Object[] state;
+    private Object[] state;
 
-    public NestedArrayState(DTClass dtClass, Object[] state) {
+    public NestedArrayState(DTClass dtClass) {
         this.dtClass = dtClass;
-        this.state = state;
     }
 
     @Override
     public EntityState copy() {
-        return new NestedArrayState(
-                dtClass,
-                Util.clone(state)
-        );
+        NestedArrayState copy = new NestedArrayState(dtClass);
+        copy.state = Util.clone(state);
+        return copy;
     }
 
     @Override
-    public Cursor emptyCursor() {
-        return new NestedArrayCursor();
+    public CursorGenerator emptyCursor() {
+        return new NestedArrayCursorGenerator();
     }
 
     @Override
     public Cursor cursorForFieldPath(final FieldPath fp) {
-        NestedArrayCursor c = new NestedArrayCursor();
+        NestedArrayCursorGenerator c = new NestedArrayCursorGenerator();
         c.add(fp.path[0] + 1);
         for (int i = 1; i <= fp.last; i++) {
             c.push(fp.path[i]);
         }
-        return c;
+        return new NestedArrayCursor(c);
     }
 
     @Override
@@ -45,66 +43,91 @@ public class NestedArrayState implements EntityState {
         return state;
     }
 
-    public class NestedArrayCursor implements Cursor {
+    public class NestedArrayCursorGenerator implements CursorGenerator {
 
-        private final Accessor[] field;
-        private final int[] idx;
-        private int last;
+        private int SL;             // Stack Last
+        private final Accessor[] F; // Accessor
+        private final int[] FP;     // FieldPath
 
-        private NestedArrayCursor() {
-            field = new Accessor[6];
-            idx = new int[6];
-            idx[0] = -1;
-            last = 0;
+        private NestedArrayCursorGenerator() {
+            SL = 0;
+            F = new Accessor[6];
+            FP = new int[6]; FP[0] = -1;
         }
 
-        private NestedArrayCursor(NestedArrayCursor other) {
-            field = new Accessor[6];
-            idx = new int[6];
-            last = other.last;
-            System.arraycopy(other.field, 0, field, 0, last + 1);
-            System.arraycopy(other.idx, 0, idx, 0, last + 1);
+        private NestedArrayCursorGenerator(NestedArrayCursorGenerator other) {
+            SL = other.SL;
+            F = new Accessor[6];
+            FP = new int[6];
+            System.arraycopy(other.F, 0, F, 0, SL + 1);
+            System.arraycopy(other.FP, 0, FP, 0, SL + 1);
         }
 
         @Override
-        public Cursor copy() {
+        public Cursor current() {
             return new NestedArrayCursor(this);
         }
 
         @Override
         public FieldPath getFieldPath() {
-            return new FieldPath(idx, 0, last + 1);
+            return new FieldPath(FP, 0, SL + 1);
         }
 
         @Override
         public int getDepth() {
-            return last + 1;
+            return SL + 1;
         }
 
         @Override
         public void push(int i) {
-            AccessorFactory cur = last < 0 ? ((S2DTClass) dtClass).getSerializer() : field[last];
-            int next = last + 1;
-            field[next] = cur.getAccessor(i);
-            idx[next] = i;
-            last = next;
+            AccessorFactory factory = SL < 0 ? ((S2DTClass) dtClass).getSerializer() : F[SL];
+            int n = SL + 1;
+            F[n] = factory.getSubAccessor(i);
+            FP[n] = i;
+            SL = n;
         }
 
         @Override
         public void pop(int n) {
             while (n > 0) {
-                field[last] = null;
-                last--;
+                F[SL] = null;
+                SL--;
                 n--;
             }
         }
 
         @Override
         public void add(int i) {
-            AccessorFactory prev = last == 0 ? ((S2DTClass) dtClass).getSerializer() : field[last - 1];
-            i += idx[last];
-            field[last] = prev.getAccessor(i);
-            idx[last] = i;
+            AccessorFactory prev = SL == 0 ? ((S2DTClass) dtClass).getSerializer() : F[SL - 1];
+            i += FP[SL];
+            F[SL] = prev.getSubAccessor(i);
+            FP[SL] = i;
+        }
+
+    }
+
+    public class NestedArrayCursor implements Cursor {
+
+        private int SL;             // Stack Last
+        private final Accessor[] F; // Accessor
+        private final int[] FP;     // FieldPath
+
+        private NestedArrayCursor(NestedArrayCursorGenerator cg) {
+            SL = cg.SL;
+            F = new Accessor[6];
+            FP = new int[6];
+            System.arraycopy(cg.F, 0, F, 0, SL + 1);
+            System.arraycopy(cg.FP, 0, FP, 0, SL + 1);
+        }
+
+        @Override
+        public Unpacker getUnpacker() {
+            return F[SL].getUnpacker();
+        }
+
+        @Override
+        public FieldType getType() {
+            return F[SL].getType();
         }
 
         @Override
@@ -119,17 +142,10 @@ public class NestedArrayState implements EntityState {
         }
 
         @Override
-        public Unpacker getUnpacker() {
-            return field[last].getUnpacker();
-        }
-
-        @Override
-        public FieldType getType() {
-            return field[last].getType();
+        public FieldPath getFieldPath() {
+            return new FieldPath(FP, 0, SL + 1);
         }
 
     }
-
-
 
 }

@@ -125,7 +125,18 @@ public class Serializer implements AccessorFactory {
     }
 
     @Override
-    public Accessor getAccessor(int i) {
+    public Accessor getSubAccessor(int i) {
         return fields[i].getAccessor();
     }
+
+    @Override
+    public Integer getSubStateLength() {
+        return fields.length;
+    }
+
+    @Override
+    public Integer getElementNum(int i) {
+        return i;
+    }
+
 }

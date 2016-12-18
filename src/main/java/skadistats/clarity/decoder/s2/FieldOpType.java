@@ -2,7 +2,7 @@ package skadistats.clarity.decoder.s2;
 
 import skadistats.clarity.decoder.bitstream.BitStream;
 import skadistats.clarity.model.FieldPath;
-import skadistats.clarity.model.state.Cursor;
+import skadistats.clarity.model.state.CursorGenerator;
 
 public enum FieldOpType {
 
@@ -12,7 +12,7 @@ public enum FieldOpType {
             fp.path[fp.last] += 1;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(1);
         }
     },
@@ -22,7 +22,7 @@ public enum FieldOpType {
             fp.path[fp.last] += 2;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(2);
         }
     },
@@ -32,7 +32,7 @@ public enum FieldOpType {
             fp.path[fp.last] += 3;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(3);
         }
     },
@@ -42,7 +42,7 @@ public enum FieldOpType {
             fp.path[fp.last] += 4;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(4);
         }
     },
@@ -52,7 +52,7 @@ public enum FieldOpType {
             fp.path[fp.last] += bs.readUBitVarFieldPath() + 5;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(bs.readUBitVarFieldPath() + 5);
         }
     },
@@ -62,7 +62,7 @@ public enum FieldOpType {
             fp.path[++fp.last] = 0;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.push(0);
         }
     },
@@ -71,7 +71,7 @@ public enum FieldOpType {
         public void execute(FieldPath fp, BitStream bs) {
             fp.path[++fp.last] = bs.readUBitVarFieldPath();
         }
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.push(bs.readUBitVarFieldPath());
         }
     },
@@ -82,7 +82,7 @@ public enum FieldOpType {
             fp.path[++fp.last] = 0;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(1);
             c.push(0);
         }
@@ -94,7 +94,7 @@ public enum FieldOpType {
             fp.path[++fp.last] = bs.readUBitVarFieldPath();
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(1);
             c.push(bs.readUBitVarFieldPath());
         }
@@ -106,7 +106,7 @@ public enum FieldOpType {
             fp.path[++fp.last] = 0;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(bs.readUBitVarFieldPath());
             c.push(0);
         }
@@ -118,7 +118,7 @@ public enum FieldOpType {
             fp.path[++fp.last] = bs.readUBitVarFieldPath() + 1;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(bs.readUBitVarFieldPath() + 2);
             c.push(bs.readUBitVarFieldPath() + 1);
         }
@@ -130,7 +130,7 @@ public enum FieldOpType {
             fp.path[++fp.last] = bs.readUBitInt(3) + 1;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(bs.readUBitInt(3) + 2);
             c.push(bs.readUBitInt(3) + 1);
         }
@@ -143,7 +143,7 @@ public enum FieldOpType {
         }
 
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(bs.readUBitInt(4) + 2);
             c.push(bs.readUBitInt(4) + 1);
         }
@@ -155,7 +155,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.push(bs.readUBitVarFieldPath());
             c.push(bs.readUBitVarFieldPath());
         }
@@ -167,7 +167,7 @@ public enum FieldOpType {
             fp.path[++fp.last] = bs.readUBitInt(5);
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.push(bs.readUBitInt(5));
             c.push(bs.readUBitInt(5));
         }
@@ -180,7 +180,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.push(bs.readUBitVarFieldPath());
             c.push(bs.readUBitVarFieldPath());
             c.push(bs.readUBitVarFieldPath());
@@ -194,7 +194,7 @@ public enum FieldOpType {
             fp.path[++fp.last] = bs.readUBitInt(5);
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.push(bs.readUBitInt(5));
             c.push(bs.readUBitInt(5));
             c.push(bs.readUBitInt(5));
@@ -208,7 +208,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(1);
             c.push(bs.readUBitVarFieldPath());
             c.push(bs.readUBitVarFieldPath());
@@ -222,7 +222,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitInt(5);
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(1);
             c.push(bs.readUBitInt(5));
             c.push(bs.readUBitInt(5));
@@ -237,7 +237,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(1);
             c.push(bs.readUBitVarFieldPath());
             c.push(bs.readUBitVarFieldPath());
@@ -253,7 +253,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitInt(5);
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(1);
             c.push(bs.readUBitInt(5));
             c.push(bs.readUBitInt(5));
@@ -268,7 +268,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(bs.readUBitVar() + 2);
             c.push(bs.readUBitVarFieldPath());
             c.push(bs.readUBitVarFieldPath());
@@ -282,7 +282,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitInt(5);
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(bs.readUBitVar() + 2);
             c.push(bs.readUBitInt(5));
             c.push(bs.readUBitInt(5));
@@ -297,7 +297,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(bs.readUBitVar() + 2);
             c.push(bs.readUBitVarFieldPath());
             c.push(bs.readUBitVarFieldPath());
@@ -313,7 +313,7 @@ public enum FieldOpType {
             fp.path[++fp.last] += bs.readUBitInt(5);
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.add(bs.readUBitVar() + 2);
             c.push(bs.readUBitInt(5));
             c.push(bs.readUBitInt(5));
@@ -330,7 +330,7 @@ public enum FieldOpType {
             }
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             int n = bs.readUBitVar();
             c.add(bs.readUBitVar());
             for (int i = 0; i < n; i++) {
@@ -352,7 +352,7 @@ public enum FieldOpType {
             }
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             FieldPath fp = c.getFieldPath();
             execute(fp, bs);
             c.pop(c.getDepth());
@@ -367,7 +367,7 @@ public enum FieldOpType {
             fp.path[--fp.last]++;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.pop(1);
             c.add(1);
         }
@@ -378,7 +378,7 @@ public enum FieldOpType {
             fp.path[--fp.last] += bs.readUBitVarFieldPath() + 1;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.pop(1);
             c.add(bs.readUBitVarFieldPath() + 1);
         }
@@ -390,7 +390,7 @@ public enum FieldOpType {
             fp.path[0]++;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.pop(c.getDepth() - 1);
             c.add(1);
         }
@@ -402,7 +402,7 @@ public enum FieldOpType {
             fp.path[0] += bs.readUBitVarFieldPath() + 1;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.pop(c.getDepth() - 1);
             c.add(bs.readUBitVarFieldPath() + 1);
         }
@@ -414,7 +414,7 @@ public enum FieldOpType {
             fp.path[0] += bs.readUBitInt(3) + 1;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.pop(c.getDepth() - 1);
             c.add(bs.readUBitInt(3) + 1);
         }
@@ -426,7 +426,7 @@ public enum FieldOpType {
             fp.path[0] += bs.readUBitInt(6) + 1;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.pop(c.getDepth() - 1);
             c.add(bs.readUBitInt(6) + 1);
         }
@@ -438,7 +438,7 @@ public enum FieldOpType {
             fp.path[fp.last]++;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.pop(bs.readUBitVarFieldPath());
             c.add(1);
         }
@@ -450,7 +450,7 @@ public enum FieldOpType {
             fp.path[fp.last] += bs.readVarSInt();
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             c.pop(bs.readUBitVarFieldPath());
             c.add(bs.readVarSInt());
         }
@@ -466,7 +466,7 @@ public enum FieldOpType {
             }
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             FieldPath fp = c.getFieldPath();
             execute(fp, bs);
             c.pop(c.getDepth());
@@ -485,7 +485,7 @@ public enum FieldOpType {
             }
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             FieldPath fp = c.getFieldPath();
             execute(fp, bs);
             c.pop(c.getDepth());
@@ -500,7 +500,7 @@ public enum FieldOpType {
             fp.path[fp.last - 1]++;
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             FieldPath fp = c.getFieldPath();
             execute(fp, bs);
             c.pop(2);
@@ -518,7 +518,7 @@ public enum FieldOpType {
             }
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
             FieldPath fp = c.getFieldPath();
             execute(fp, bs);
             c.pop(c.getDepth());
@@ -532,7 +532,7 @@ public enum FieldOpType {
         public void execute(FieldPath fp, BitStream bs) {
         }
         @Override
-        public void applyTo(Cursor c, BitStream bs) {
+        public void applyTo(CursorGenerator c, BitStream bs) {
         }
     };
 
@@ -544,7 +544,7 @@ public enum FieldOpType {
 
     public abstract void execute(FieldPath fp, BitStream bs);
 
-    public abstract void applyTo(Cursor c, BitStream bs);
+    public abstract void applyTo(CursorGenerator c, BitStream bs);
 
     public int getWeight() {
         return weight;

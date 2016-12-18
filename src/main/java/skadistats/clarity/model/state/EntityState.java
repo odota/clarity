@@ -4,7 +4,7 @@ import skadistats.clarity.model.FieldPath;
 
 public interface EntityState {
 
-    Cursor emptyCursor();
+    CursorGenerator emptyCursor();
     Cursor cursorForFieldPath(FieldPath fp);
     Object[] getState();
 

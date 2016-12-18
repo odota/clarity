@@ -3,7 +3,7 @@ package skadistats.clarity.decoder.s1;
 import skadistats.clarity.decoder.FieldReader;
 import skadistats.clarity.decoder.bitstream.BitStream;
 import skadistats.clarity.model.s1.PropFlag;
-import skadistats.clarity.model.state.Cursor;
+import skadistats.clarity.model.state.CursorGenerator;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 
@@ -46,9 +46,9 @@ public class S1FieldReader extends FieldReader<S1DTClass> {
                         cursor += offset + 1;
                     }
                 }
-                Cursor c = entityState.emptyCursor();
+                CursorGenerator c = entityState.emptyCursor();
                 c.add(dtClass.getIndexMapping()[cursor]);
-                cursors[n++] = c;
+                cursors[n++] = c.current();
             }
 
             ReceiveProp[] receiveProps = dtClass.getReceiveProps();

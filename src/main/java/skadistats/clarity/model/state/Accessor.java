@@ -14,8 +14,18 @@ public class Accessor implements AccessorFactory {
     }
 
     @Override
-    public Accessor getAccessor(int i) {
+    public Accessor getSubAccessor(int i) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Integer getSubStateLength() {
+        return null;
+    }
+
+    @Override
+    public Integer getElementNum(int i) {
+        return null;
     }
 
 }

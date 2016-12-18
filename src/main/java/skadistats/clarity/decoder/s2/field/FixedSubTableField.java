@@ -31,8 +31,12 @@ public class FixedSubTableField extends Field {
                 return baseType;
             }
             @Override
-            public Accessor getAccessor(int i) {
-                return getProperties().getSerializer().getAccessor(i);
+            public Accessor getSubAccessor(int i) {
+                return getProperties().getSerializer().getSubAccessor(i);
+            }
+            @Override
+            public Integer getSubStateLength() {
+                return getProperties().getSerializer().getSubStateLength();
             }
         };
     }

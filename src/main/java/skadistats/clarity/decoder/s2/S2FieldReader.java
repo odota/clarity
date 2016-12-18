@@ -7,6 +7,7 @@ import skadistats.clarity.decoder.s2.field.FieldProperties;
 import skadistats.clarity.decoder.s2.field.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.CursorGenerator;
 import skadistats.clarity.model.state.Cursor;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
@@ -49,26 +50,25 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
             }
 
             int n = 0;
-            Cursor c = state.emptyCursor();
+            CursorGenerator cg = state.emptyCursor();
             while (true) {
                 int offsBefore = bs.pos();
                 FieldOpType op = bs.readFieldOp();
-                op.applyTo(c, bs);
+                op.applyTo(cg, bs);
                 if (debug) {
                     opDebugTable.setData(n, 0, op);
-                    opDebugTable.setData(n, 1, c.getFieldPath());
+                    opDebugTable.setData(n, 1, cg.getFieldPath());
                     opDebugTable.setData(n, 2, bs.pos() - offsBefore);
                     opDebugTable.setData(n, 3, bs.toString(offsBefore, bs.pos()));
                 }
                 if (op == FieldOpType.FieldPathEncodeFinish) {
                     break;
                 }
-                cursors[n++] = c;
-                c = c.copy();
+                cursors[n++] = cg.current();
             }
 
             for (int r = 0; r < n; r++) {
-                c = cursors[r];
+                Cursor c = cursors[r];
                 Unpacker unpacker = c.getUnpacker();
                 if (unpacker == null) {
                     throw new ClarityException("no unpacker for field %s with type %s!", c.getFieldPath(), c.getType());
