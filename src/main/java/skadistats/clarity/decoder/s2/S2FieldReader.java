@@ -50,21 +50,21 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
             }
 
             int n = 0;
-            CursorGenerator cg = state.emptyCursor();
+            FieldPath fp = new FieldPath();
             while (true) {
                 int offsBefore = bs.pos();
                 FieldOpType op = bs.readFieldOp();
-                op.applyTo(cg, bs);
+                op.execute(fp, bs);
                 if (debug) {
                     opDebugTable.setData(n, 0, op);
-                    opDebugTable.setData(n, 1, cg.getFieldPath());
+                    opDebugTable.setData(n, 1, fp);
                     opDebugTable.setData(n, 2, bs.pos() - offsBefore);
                     opDebugTable.setData(n, 3, bs.toString(offsBefore, bs.pos()));
                 }
                 if (op == FieldOpType.FieldPathEncodeFinish) {
                     break;
                 }
-                cursors[n++] = cg.current();
+                cursors[n++] = state.cursorForFieldPath(fp);
             }
 
             for (int r = 0; r < n; r++) {
@@ -78,7 +78,7 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
                 c.setValue(data);
 
                 if (debug) {
-                    FieldPath fp = c.getFieldPath();
+                    fp = c.getFieldPath();
                     FieldProperties props = dtClass.getFieldForFieldPath(fp).getProperties();
                     FieldType type = dtClass.getTypeForFieldPath(fp);
                     dataDebugTable.setData(r, 0, fp);
