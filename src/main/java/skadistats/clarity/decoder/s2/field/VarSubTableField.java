@@ -11,14 +11,17 @@ import java.util.List;
 
 public class VarSubTableField extends Field {
 
+    private final int maxLength;
+
     private final FieldType baseType;
     private final Unpacker baseUnpacker;
-    private final Accessor elementAccessor;
 
+    private final Accessor elementAccessor;
     private final Accessor accessor;
 
-    public VarSubTableField(FieldProperties properties) {
+    public VarSubTableField(FieldProperties properties, int maxLength) {
         super(properties);
+        this.maxLength = maxLength;
 
         baseType = FieldType.forString("uint32");
         baseUnpacker = S2UnpackerFactory.createUnpacker(properties, baseType.getBaseType());
@@ -92,6 +95,11 @@ public class VarSubTableField extends Field {
         fp.path[fp.last] = Integer.valueOf(idx);
         fp.last++;
         return properties.getSerializer().getFieldPathForName(fp, property.substring(5));
+    }
+
+    @Override
+    public int sizeOf() {
+        return maxLength * properties.getSerializer().sizeOf();
     }
 
 }

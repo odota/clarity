@@ -8,5 +8,10 @@ public class LongVarUnsignedUnpacker implements Unpacker<Long> {
     public Long unpack(BitStream bs) {
         return bs.readVarULong();
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 8;
+    }
+
 }

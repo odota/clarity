@@ -8,5 +8,10 @@ public class StringLenUnpacker implements Unpacker<String> {
     public String unpack(BitStream bs) {
         return bs.readString(bs.readUBitInt(9));
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 64;
+    }
+
 }

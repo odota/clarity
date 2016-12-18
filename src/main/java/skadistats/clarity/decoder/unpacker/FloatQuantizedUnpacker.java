@@ -197,4 +197,9 @@ public class FloatQuantizedUnpacker implements Unpacker<Float> {
         return minValue + (maxValue - minValue) * v;
     }
 
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }

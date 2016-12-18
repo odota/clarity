@@ -11,5 +11,10 @@ public class VectorNormalUnpacker implements Unpacker<Vector> {
             bs.read3BitNormal()
         );
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 12;
+    }
+
 }

@@ -7,14 +7,25 @@ import skadistats.clarity.model.state.AccessorFactory;
 
 import java.util.List;
 
-public class Serializer implements AccessorFactory {
+public class Serializer implements AccessorFactory, AddressLayoutable {
 
     private final SerializerId id;
     private final Field[] fields;
+    private final int[] offsets;
+    private final int sizeOf;
 
     public Serializer(SerializerId id, Field[] fields) {
         this.id = id;
         this.fields = fields;
+
+        offsets = new int[fields.length];
+        int o = 0;
+        for (int i = 0; i < fields.length; i++) {
+            offsets[i] = o;
+            o += fields[i].sizeOf();
+        }
+        sizeOf = o;
+
     }
 
     public SerializerId getId() {
@@ -62,6 +73,11 @@ public class Serializer implements AccessorFactory {
     @Override
     public Integer getSubStateLength() {
         return fields.length;
+    }
+
+    @Override
+    public int sizeOf() {
+        return sizeOf;
     }
 
 }

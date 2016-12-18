@@ -13,5 +13,10 @@ public class QAngleNoScaleUnpacker implements Unpacker<Vector> {
         v[2] = Float.intBitsToFloat(bs.readUBitInt(32));
         return new Vector(v);
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 12;
+    }
+
 }

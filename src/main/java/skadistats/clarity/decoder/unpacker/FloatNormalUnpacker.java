@@ -8,5 +8,10 @@ public class FloatNormalUnpacker implements Unpacker<Float> {
     public Float unpack(BitStream bs) {
         return bs.readBitNormal();
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }

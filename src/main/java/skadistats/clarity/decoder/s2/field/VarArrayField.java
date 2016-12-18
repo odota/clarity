@@ -12,6 +12,8 @@ import java.util.List;
 
 public class VarArrayField extends Field {
 
+    private final int maxLength;
+
     private final FieldType baseType;
     private final Unpacker baseUnpacker;
 
@@ -21,8 +23,9 @@ public class VarArrayField extends Field {
     private final Accessor elementAccessor;
     private final Accessor accessor;
 
-    public VarArrayField(FieldProperties properties) {
+    public VarArrayField(FieldProperties properties, int maxLength) {
         super(properties);
+        this.maxLength = maxLength;
 
         baseType = FieldType.forString("uint32");
         baseUnpacker = S2UnpackerFactory.createUnpacker(properties, baseType.getBaseType());
@@ -91,6 +94,11 @@ public class VarArrayField extends Field {
         }
         fp.path[fp.last] = Integer.valueOf(property);
         return fp;
+    }
+
+    @Override
+    public int sizeOf() {
+        return maxLength * elementUnpacker.sizeOfValue();
     }
 
 }

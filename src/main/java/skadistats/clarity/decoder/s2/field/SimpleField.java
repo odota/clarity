@@ -48,4 +48,9 @@ public class SimpleField extends Field {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public int sizeOf() {
+        return unpacker.sizeOfValue();
+    }
+
 }

@@ -67,4 +67,9 @@ public class FixedSubTableField extends Field {
         return properties.getSerializer().getFieldPathForName(fp, property);
     }
 
+    @Override
+    public int sizeOf() {
+        return properties.getSerializer().sizeOf();
+    }
+
 }

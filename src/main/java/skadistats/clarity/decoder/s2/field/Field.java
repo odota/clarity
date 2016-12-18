@@ -1,11 +1,12 @@
 package skadistats.clarity.decoder.s2.field;
 
+import skadistats.clarity.decoder.s2.AddressLayoutable;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.state.Accessor;
 
 import java.util.List;
 
-public abstract class Field {
+public abstract class Field implements AddressLayoutable {
 
     protected final FieldProperties properties;
 

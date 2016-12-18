@@ -19,5 +19,10 @@ public class QAngleBitCountUnpacker implements Unpacker<Vector> {
         v[2] = bs.readBitAngle(nBits);
         return new Vector(v);
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 12;
+    }
+
 }

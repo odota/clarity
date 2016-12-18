@@ -23,5 +23,10 @@ public class QAnglePitchYawOnlyUnpacker implements Unpacker<Vector> {
         }
         return new Vector(v);
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 12;
+    }
+
 }

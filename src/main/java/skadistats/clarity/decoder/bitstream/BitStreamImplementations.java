@@ -1,6 +1,7 @@
 package skadistats.clarity.decoder.bitstream;
 
 import com.google.protobuf.ByteString;
+import skadistats.clarity.Platform;
 import skadistats.clarity.decoder.Util;
 
 import java.lang.reflect.Constructor;
@@ -26,8 +27,8 @@ public class BitStreamImplementations {
 
     public static Constructor<BitStream> determineConstructor() {
         if (implementation == null) {
-            implementation = System.getProperty("os.arch").indexOf("64") != -1 ? 2 : 0;
-            implementation += classForName("sun.misc.Unsafe") != null ? 1 : 0;
+            implementation = Platform.getArchitecture() == Platform.Architecture.IA64 ? 2 : 0;
+            implementation += Platform.getUnsafe() != null ? 1 : 0;
         }
         try {
             Class<?> implClass = classForName(bitStreamClasses[implementation]);

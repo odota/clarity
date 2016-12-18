@@ -9,4 +9,9 @@ public class FloatNoScaleUnpacker implements Unpacker<Float> {
         return Float.intBitsToFloat(bs.readUBitInt(32));
     }
 
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }

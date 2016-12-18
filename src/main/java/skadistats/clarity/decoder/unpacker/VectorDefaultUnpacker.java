@@ -19,5 +19,10 @@ public class VectorDefaultUnpacker implements Unpacker<Vector> {
             floatUnpacker.unpack(bs)
         );
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 3 * floatUnpacker.sizeOfValue();
+    }
+
 }

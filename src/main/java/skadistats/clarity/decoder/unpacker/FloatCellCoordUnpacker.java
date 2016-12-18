@@ -19,4 +19,9 @@ public class FloatCellCoordUnpacker implements Unpacker<Float> {
         return bs.readCellCoord(nBits, integral, lowPrecision);
     }
 
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }

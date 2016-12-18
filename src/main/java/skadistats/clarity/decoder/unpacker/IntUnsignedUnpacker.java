@@ -14,5 +14,10 @@ public class IntUnsignedUnpacker implements Unpacker<Integer> {
     public Integer unpack(BitStream bs) {
         return bs.readUBitInt(nBits);
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }

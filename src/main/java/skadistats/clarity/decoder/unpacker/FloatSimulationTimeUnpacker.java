@@ -10,5 +10,10 @@ public class FloatSimulationTimeUnpacker implements Unpacker<Float> {
     public Float unpack(BitStream bs) {
         return bs.readVarULong() * FRAME_TIME;
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }

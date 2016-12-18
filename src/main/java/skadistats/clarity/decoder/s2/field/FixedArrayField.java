@@ -80,4 +80,9 @@ public class FixedArrayField extends Field {
         return fp;
     }
 
+    @Override
+    public int sizeOf() {
+        return length * elementUnpacker.sizeOfValue();
+    }
+
 }

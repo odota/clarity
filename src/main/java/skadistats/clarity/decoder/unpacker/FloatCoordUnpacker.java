@@ -8,5 +8,10 @@ public class FloatCoordUnpacker implements Unpacker<Float> {
     public Float unpack(BitStream bs) {
         return bs.readBitCoord();
     }
-    
+
+    @Override
+    public int sizeOfValue() {
+        return 4;
+    }
+
 }
