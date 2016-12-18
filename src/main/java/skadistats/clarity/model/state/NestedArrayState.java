@@ -7,6 +7,7 @@ import skadistats.clarity.decoder.s2.field.FieldProperties;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.MutableFieldPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +37,11 @@ public class NestedArrayState implements EntityState {
     @Override
     public List<DumpEntry> collectDump() {
         List<DumpEntry> result = new ArrayList<>();
-        dumpInternal(dtClass, state, new FieldPath(), "", result);
+        dumpInternal(dtClass, state, new MutableFieldPath(), "", result);
         return result;
     }
 
-    private void dumpInternal(AccessorFactory factory, Object[] state, FieldPath fp, String namePrefix, List<DumpEntry> result) {
+    private void dumpInternal(AccessorFactory factory, Object[] state, MutableFieldPath fp, String namePrefix, List<DumpEntry> result) {
         for (int i = 0; i < state.length; i++) {
             if (state[i] == null) continue;
 
@@ -58,7 +59,7 @@ public class NestedArrayState implements EntityState {
                 fp.last--;
             } else {
                 result.add(new DumpEntry(
-                        fp,
+                        fp.toImmutable(),
                         namePrefix + subAccessor.getNameSegment(i),
                         state[i]
                 ));
@@ -69,11 +70,11 @@ public class NestedArrayState implements EntityState {
     @Override
     public List<FieldPath> collectFieldPaths() {
         List<FieldPath> result = new ArrayList<>();
-        collectInternal(dtClass, state, new FieldPath(), result);
+        collectInternal(dtClass, state, new MutableFieldPath(), result);
         return result;
     }
 
-    private void collectInternal(AccessorFactory factory, Object[] state, FieldPath fp, List<FieldPath> result) {
+    private void collectInternal(AccessorFactory factory, Object[] state, MutableFieldPath fp, List<FieldPath> result) {
         for (int i = 0; i < state.length; i++) {
             if (state[i] == null) continue;
 
@@ -89,7 +90,7 @@ public class NestedArrayState implements EntityState {
                 );
                 fp.last--;
             } else {
-                result.add(new FieldPath(fp));
+                result.add(fp.toImmutable());
             }
         }
     }
@@ -100,11 +101,11 @@ public class NestedArrayState implements EntityState {
         private final FieldPath fieldPath;
 
         private CursorImpl(FieldPath fp) {
-            this.fieldPath = new FieldPath(fp);
-            this.accessor = new Accessor[fp.last + 1];
+            this.fieldPath = fp;
+            this.accessor = new Accessor[fp.getLast() + 1];
             AccessorFactory factory = dtClass;
-            for (int i = 0; i <= fp.last; i++) {
-                Accessor subAccessor = factory.getSubAccessor(fp.path[i]);
+            for (int i = 0; i <= fp.getLast(); i++) {
+                Accessor subAccessor = factory.getSubAccessor(fp.getElement(i));
                 accessor[i] = subAccessor;
                 factory = subAccessor;
             }
@@ -113,11 +114,11 @@ public class NestedArrayState implements EntityState {
         @Override
         public <T> T getValue() {
             Object[] s = state;
-            for (int n = 0; n <= fieldPath.last; n++) {
+            for (int n = 0; n <= fieldPath.getLast(); n++) {
                 Accessor a = accessor[n];
-                Object si = s[fieldPath.path[n]];
+                Object si = s[fieldPath.getElement(n)];
 
-                if (n == fieldPath.last) {
+                if (n == fieldPath.getLast()) {
                     if (a.isPointer()) {
                         Boolean v = si != null;
                         return (T) v;
@@ -129,10 +130,10 @@ public class NestedArrayState implements EntityState {
                     }
                 } else {
                     if (a.isVariableArray()) {
-                        si = ensureSubStateCapacity(s, fieldPath.path[n], fieldPath.path[n + 1] + 1, false);
+                        si = ensureSubStateCapacity(s, fieldPath.getElement(n), fieldPath.getElement(n + 1) + 1, false);
                     } else if (si == null) {
                         si = new Object[a.getSubStateLength()];
-                        s[fieldPath.path[n]] = si;
+                        s[fieldPath.getElement(n)] = si;
                     }
                 }
                 s = (Object[]) si;
@@ -143,30 +144,30 @@ public class NestedArrayState implements EntityState {
         @Override
         public void setValue(Object data) {
             Object[] s = state;
-            for (int n = 0; n <= fieldPath.last; n++) {
+            for (int n = 0; n <= fieldPath.getLast(); n++) {
                 Accessor a = accessor[n];
-                Object si = s[fieldPath.path[n]];
+                Object si = s[fieldPath.getElement(n)];
 
-                if (n == fieldPath.last) {
+                if (n == fieldPath.getLast()) {
                     if (a.isPointer()) {
                         boolean b = (Boolean) data;
                         if (b & si == null) {
-                            s[fieldPath.path[n]] = new Object[a.getSubStateLength()];
+                            s[fieldPath.getElement(n)] = new Object[a.getSubStateLength()];
                         } else if (!b & si != null) {
-                            s[fieldPath.path[n]] = null;
+                            s[fieldPath.getElement(n)] = null;
                         }
                     } else if (a.isVariableArray()) {
-                        ensureSubStateCapacity(s, fieldPath.path[n], (Integer) data, true);
+                        ensureSubStateCapacity(s, fieldPath.getElement(n), (Integer) data, true);
                     } else {
-                        s[fieldPath.path[n]] = data;
+                        s[fieldPath.getElement(n)] = data;
                     }
                     return;
                 } else {
                     if (a.isVariableArray()) {
-                        si = ensureSubStateCapacity(s, fieldPath.path[n], fieldPath.path[n + 1] + 1, false);
+                        si = ensureSubStateCapacity(s, fieldPath.getElement(n), fieldPath.getElement(n + 1) + 1, false);
                     } else if (si == null) {
                         si = new Object[a.getSubStateLength()];
-                        s[fieldPath.path[n]] = si;
+                        s[fieldPath.getElement(n)] = si;
                     }
                 }
                 s = (Object[]) si;
@@ -193,12 +194,12 @@ public class NestedArrayState implements EntityState {
         @Override
         public String getPropertyName() {
             StringBuilder b = new StringBuilder();
-            for (int n = 0; n <= fieldPath.last; n++) {
+            for (int n = 0; n <= fieldPath.getLast(); n++) {
                 Accessor a = accessor[n];
                 if (b.length() != 0) {
                     b.append('.');
                 }
-                b.append(a.getNameSegment(fieldPath.path[n]));
+                b.append(a.getNameSegment(fieldPath.getElement(n)));
             }
             return b.toString();
         }
@@ -210,17 +211,17 @@ public class NestedArrayState implements EntityState {
 
         @Override
         public Unpacker getUnpacker() {
-            return accessor[fieldPath.last].getUnpacker();
+            return accessor[fieldPath.getLast()].getUnpacker();
         }
 
         @Override
         public FieldType getFieldType() {
-            return accessor[fieldPath.last].getType();
+            return accessor[fieldPath.getLast()].getType();
         }
 
         @Override
         public FieldProperties getFieldProperties() {
-            return accessor[fieldPath.last].getFieldProperties();
+            return accessor[fieldPath.getLast()].getFieldProperties();
         }
 
     }

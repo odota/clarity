@@ -1,90 +1,90 @@
 package skadistats.clarity.decoder.s2;
 
 import skadistats.clarity.decoder.bitstream.BitStream;
-import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.MutableFieldPath;
 
 public enum FieldOpType {
 
     PlusOne(36271) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += 1;
         }
     },
     PlusTwo(10334) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += 2;
         }
     },
     PlusThree(1375) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += 3;
         }
     },
     PlusFour(646) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += 4;
         }
     },
     PlusN(4128) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += bs.readUBitVarFieldPath() + 5;
         }
     },
     PushOneLeftDeltaZeroRightZero(35) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[++fp.last] = 0;
         }
     },
     PushOneLeftDeltaZeroRightNonZero(3) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[++fp.last] = bs.readUBitVarFieldPath();
         }
     },
     PushOneLeftDeltaOneRightZero(521) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last]++;
             fp.path[++fp.last] = 0;
         }
     },
     PushOneLeftDeltaOneRightNonZero(2942) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last]++;
             fp.path[++fp.last] = bs.readUBitVarFieldPath();
         }
     },
     PushOneLeftDeltaNRightZero(560) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += bs.readUBitVarFieldPath();
             fp.path[++fp.last] = 0;
         }
     },
     PushOneLeftDeltaNRightNonZero(471) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += bs.readUBitVarFieldPath() + 2;
             fp.path[++fp.last] = bs.readUBitVarFieldPath() + 1;
         }
     },
     PushOneLeftDeltaNRightNonZeroPack6Bits(10530) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += bs.readUBitInt(3) + 2;
             fp.path[++fp.last] = bs.readUBitInt(3) + 1;
         }
     },
     PushOneLeftDeltaNRightNonZeroPack8Bits(251) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += bs.readUBitInt(4) + 2;
             fp.path[++fp.last] = bs.readUBitInt(4) + 1;
         }
@@ -92,21 +92,21 @@ public enum FieldOpType {
     },
     PushTwoLeftDeltaZero(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
         }
     },
     PushTwoPack5LeftDeltaZero(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[++fp.last] = bs.readUBitInt(5);
             fp.path[++fp.last] = bs.readUBitInt(5);
         }
     },
     PushThreeLeftDeltaZero(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
@@ -114,7 +114,7 @@ public enum FieldOpType {
     },
     PushThreePack5LeftDeltaZero(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[++fp.last] = bs.readUBitInt(5);
             fp.path[++fp.last] = bs.readUBitInt(5);
             fp.path[++fp.last] = bs.readUBitInt(5);
@@ -122,7 +122,7 @@ public enum FieldOpType {
     },
     PushTwoLeftDeltaOne(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last]++;
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
@@ -130,7 +130,7 @@ public enum FieldOpType {
     },
     PushTwoPack5LeftDeltaOne(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last]++;
             fp.path[++fp.last] += bs.readUBitInt(5);
             fp.path[++fp.last] += bs.readUBitInt(5);
@@ -138,7 +138,7 @@ public enum FieldOpType {
     },
     PushThreeLeftDeltaOne(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last]++;
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
@@ -147,7 +147,7 @@ public enum FieldOpType {
     },
     PushThreePack5LeftDeltaOne(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last]++;
             fp.path[++fp.last] += bs.readUBitInt(5);
             fp.path[++fp.last] += bs.readUBitInt(5);
@@ -156,7 +156,7 @@ public enum FieldOpType {
     },
     PushTwoLeftDeltaN(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += bs.readUBitVar() + 2;
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
@@ -164,7 +164,7 @@ public enum FieldOpType {
     },
     PushTwoPack5LeftDeltaN(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += bs.readUBitVar() + 2;
             fp.path[++fp.last] += bs.readUBitInt(5);
             fp.path[++fp.last] += bs.readUBitInt(5);
@@ -172,7 +172,7 @@ public enum FieldOpType {
     },
     PushThreeLeftDeltaN(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += bs.readUBitVar() + 2;
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
             fp.path[++fp.last] += bs.readUBitVarFieldPath();
@@ -181,7 +181,7 @@ public enum FieldOpType {
     },
     PushThreePack5LeftDeltaN(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last] += bs.readUBitVar() + 2;
             fp.path[++fp.last] += bs.readUBitInt(5);
             fp.path[++fp.last] += bs.readUBitInt(5);
@@ -190,7 +190,7 @@ public enum FieldOpType {
     },
     PushN(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             int n = bs.readUBitVar();
             fp.path[fp.last] += bs.readUBitVar();
             for (int i = 0; i < n; i++) {
@@ -200,7 +200,7 @@ public enum FieldOpType {
     },
     PushNAndNonTopographical(310) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             for (int i = 0; i <= fp.last; i++) {
                 if (bs.readBitFlag()) {
                     fp.path[i] += bs.readVarSInt() + 1;
@@ -214,61 +214,61 @@ public enum FieldOpType {
     },
     PopOnePlusOne(2) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[--fp.last]++;
         }
     },
     PopOnePlusN(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[--fp.last] += bs.readUBitVarFieldPath() + 1;
         }
     },
     PopAllButOnePlusOne(1837) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.last = 0;
             fp.path[0]++;
         }
     },
     PopAllButOnePlusN(149) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.last = 0;
             fp.path[0] += bs.readUBitVarFieldPath() + 1;
         }
     },
     PopAllButOnePlusNPack3Bits(300) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.last = 0;
             fp.path[0] += bs.readUBitInt(3) + 1;
         }
     },
     PopAllButOnePlusNPack6Bits(634) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.last = 0;
             fp.path[0] += bs.readUBitInt(6) + 1;
         }
     },
     PopNPlusOne(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.last -= bs.readUBitVarFieldPath();
             fp.path[fp.last]++;
         }
     },
     PopNPlusN(0) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.last -= bs.readUBitVarFieldPath();
             fp.path[fp.last] += bs.readVarSInt();
         }
     },
     PopNAndNonTopographical(1) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.last -= bs.readUBitVarFieldPath();
             for (int i = 0; i <= fp.last; i++) {
                 if (bs.readBitFlag()) {
@@ -279,7 +279,7 @@ public enum FieldOpType {
     },
     NonTopoComplex(76) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             for (int i = 0; i <= fp.last; i++) {
                 if (bs.readBitFlag()) {
                     fp.path[i] += bs.readVarSInt();
@@ -289,13 +289,13 @@ public enum FieldOpType {
     },
     NonTopoPenultimatePluseOne(271) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             fp.path[fp.last - 1]++;
         }
     },
     NonTopoComplexPack4Bits(99) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
             for (int i = 0; i <= fp.last; i++) {
                 if (bs.readBitFlag()) {
                     fp.path[i] += bs.readUBitInt(4) - 7;
@@ -305,7 +305,7 @@ public enum FieldOpType {
     },
     FieldPathEncodeFinish(25474) {
         @Override
-        public void execute(FieldPath fp, BitStream bs) {
+        public void execute(MutableFieldPath fp, BitStream bs) {
         }
     };
 
@@ -315,7 +315,7 @@ public enum FieldOpType {
         this.weight = weight;
     }
 
-    public abstract void execute(FieldPath fp, BitStream bs);
+    public abstract void execute(MutableFieldPath fp, BitStream bs);
 
     public int getWeight() {
         return weight;

@@ -2,6 +2,7 @@ package skadistats.clarity.decoder.s2;
 
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.MutableFieldPath;
 import skadistats.clarity.model.state.Accessor;
 
 import java.util.ArrayList;
@@ -65,8 +66,7 @@ public class S2DTClass implements DTClass {
 
     @Override
     public FieldPath getFieldPathForName(String property) {
-        FieldPath fp = new FieldPath();
-        return serializer.getFieldPathForName(fp, property);
+        return serializer.getFieldPathForName(new MutableFieldPath(), property);
     }
 
     @Override

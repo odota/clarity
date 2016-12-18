@@ -5,6 +5,7 @@ import skadistats.clarity.decoder.Util;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.MutableFieldPath;
 import skadistats.clarity.model.state.Accessor;
 
 import java.util.List;
@@ -89,16 +90,16 @@ public class VarSubTableField extends Field {
     @Override
     public void accumulateName(FieldPath fp, int pos, List<String> parts) {
         addBasePropertyName(parts);
-        if (fp.last != pos - 1) {
-            parts.add(Util.arrayIdxToString(fp.path[pos]));
-            if (fp.last != pos) {
+        if (fp.getLast() != pos - 1) {
+            parts.add(Util.arrayIdxToString(fp.getElement(pos)));
+            if (fp.getLast() != pos) {
                 properties.getSerializer().accumulateName(fp, pos + 1, parts);
             }
         }
     }
 
     @Override
-    public FieldPath getFieldPathForName(FieldPath fp, String property) {
+    public FieldPath getFieldPathForName(MutableFieldPath fp, String property) {
         String idx = property.substring(0, 4);
         fp.path[fp.last] = Integer.valueOf(idx);
         fp.last++;

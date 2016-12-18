@@ -3,6 +3,7 @@ package skadistats.clarity.decoder.s1;
 import skadistats.clarity.decoder.FieldReader;
 import skadistats.clarity.decoder.bitstream.BitStream;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.ImmutableFieldPath;
 import skadistats.clarity.model.s1.PropFlag;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
@@ -45,7 +46,7 @@ public class S1FieldReader extends FieldReader<S1DTClass> {
                         cursor += offset + 1;
                     }
                 }
-                FieldPath fp = new FieldPath(dtClass.getIndexMapping()[cursor]);
+                FieldPath fp = new ImmutableFieldPath(dtClass.getIndexMapping()[cursor]);
                 fieldPaths[n] = fp;
                 cursors[n] = state.cursorForFieldPath(fp);
                 n++;
@@ -54,7 +55,7 @@ public class S1FieldReader extends FieldReader<S1DTClass> {
             ReceiveProp[] receiveProps = dtClass.getReceiveProps();
             for (int ci = 0; ci < n; ci++) {
                 int offsBefore = bs.pos();
-                int o = cursors[ci].getFieldPath().path[0];
+                int o = cursors[ci].getFieldPath().getElement(0);
                 Object data = receiveProps[o].decode(bs);
                 cursors[ci].setValue(data);
 

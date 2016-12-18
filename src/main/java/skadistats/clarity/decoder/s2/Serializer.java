@@ -2,6 +2,7 @@ package skadistats.clarity.decoder.s2;
 
 import skadistats.clarity.decoder.s2.field.Field;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.MutableFieldPath;
 import skadistats.clarity.model.state.Accessor;
 import skadistats.clarity.model.state.AccessorFactory;
 
@@ -36,17 +37,17 @@ public class Serializer implements AccessorFactory {
     }
 
     public void accumulateName(FieldPath fp, int pos, List<String> parts) {
-        fields[fp.path[pos]].accumulateName(fp, pos + 1, parts);
+        fields[fp.getElement(pos)].accumulateName(fp, pos + 1, parts);
     }
 
-    private FieldPath getFieldPathForNameInternal(FieldPath fp, String property) {
+    private FieldPath getFieldPathForNameInternal(MutableFieldPath fp, String property) {
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             String fieldName = field.getProperties().getName();
             if (property.startsWith(fieldName)) {
                 fp.path[fp.last] = i;
                 if (property.length() == fieldName.length()) {
-                    return fp;
+                    return fp.toImmutable();
                 } else {
                     if (property.charAt(fieldName.length()) != '.') {
                         continue;
@@ -60,7 +61,7 @@ public class Serializer implements AccessorFactory {
         return null;
     }
 
-    public FieldPath getFieldPathForName(FieldPath fp, String property) {
+    public FieldPath getFieldPathForName(MutableFieldPath fp, String property) {
         return getFieldPathForNameInternal(fp, property);
     }
 

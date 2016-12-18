@@ -2,6 +2,7 @@ package skadistats.clarity.decoder.s1;
 
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.ImmutableFieldPath;
 import skadistats.clarity.model.state.Accessor;
 
 import java.util.HashMap;
@@ -50,13 +51,13 @@ public class S1DTClass implements DTClass {
 
     @Override
     public String getNameForFieldPath(FieldPath fp) {
-        return this.receiveProps[fp.path[0]].getVarName();
+        return this.receiveProps[fp.getElement(0)].getVarName();
     }
 
     @Override
     public FieldPath getFieldPathForName(String name){
         Integer idx = this.propsByName.get(name);
-        return idx != null ? new FieldPath(idx.intValue()) : null;
+        return idx != null ? new ImmutableFieldPath(idx.intValue()) : null;
     }
 
     public S1DTClass getSuperClass() {

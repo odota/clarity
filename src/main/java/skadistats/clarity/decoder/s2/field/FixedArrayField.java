@@ -6,6 +6,7 @@ import skadistats.clarity.decoder.Util;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.MutableFieldPath;
 import skadistats.clarity.model.state.Accessor;
 
 import java.util.List;
@@ -72,20 +73,20 @@ public class FixedArrayField extends Field {
 
     @Override
     public void accumulateName(FieldPath fp, int pos, List<String> parts) {
-        assert fp.last == pos || fp.last == pos - 1;
+        assert fp.getLast() == pos || fp.getLast() == pos - 1;
         addBasePropertyName(parts);
-        if (fp.last == pos) {
-            parts.add(Util.arrayIdxToString(fp.path[pos]));
+        if (fp.getLast() == pos) {
+            parts.add(Util.arrayIdxToString(fp.getElement(pos)));
         }
     }
 
     @Override
-    public FieldPath getFieldPathForName(FieldPath fp, String property) {
+    public FieldPath getFieldPathForName(MutableFieldPath fp, String property) {
         if (property.length() != 4) {
             throw new ClarityException("unresolvable fieldpath");
         }
         fp.path[fp.last] = Integer.valueOf(property);
-        return fp;
+        return fp.toImmutable();
     }
 
 }

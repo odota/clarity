@@ -6,6 +6,7 @@ import skadistats.clarity.decoder.bitstream.BitStream;
 import skadistats.clarity.decoder.s2.field.FieldProperties;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.MutableFieldPath;
 import skadistats.clarity.model.state.Cursor;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
@@ -48,14 +49,14 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
             }
 
             int n = 0;
-            FieldPath fp = new FieldPath();
+            MutableFieldPath fp = new MutableFieldPath();
             while (true) {
                 int offsBefore = bs.pos();
                 FieldOpType op = bs.readFieldOp();
                 op.execute(fp, bs);
                 if (debug) {
                     opDebugTable.setData(n, 0, op);
-                    opDebugTable.setData(n, 1, fp.toString());
+                    opDebugTable.setData(n, 1, fp.toImmutable());
                     opDebugTable.setData(n, 2, bs.pos() - offsBefore);
                     opDebugTable.setData(n, 3, bs.toString(offsBefore, bs.pos()));
                 }
@@ -63,7 +64,7 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
                     break;
                 }
 
-                FieldPath fpCopy = new FieldPath(fp);
+                FieldPath fpCopy = fp.toImmutable();
                 fieldPaths[n] = fpCopy;
                 cursors[n] = state.cursorForFieldPath(fpCopy);
                 n++;
