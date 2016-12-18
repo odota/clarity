@@ -2,7 +2,6 @@ package skadistats.clarity.processor.tempentities;
 
 import skadistats.clarity.decoder.FieldReader;
 import skadistats.clarity.decoder.bitstream.BitStream;
-import skadistats.clarity.decoder.s1.ReceiveProp;
 import skadistats.clarity.decoder.s1.S1DTClass;
 import skadistats.clarity.event.Event;
 import skadistats.clarity.event.Insert;
@@ -10,7 +9,8 @@ import skadistats.clarity.event.InsertEvent;
 import skadistats.clarity.event.Provides;
 import skadistats.clarity.model.EngineType;
 import skadistats.clarity.model.Entity;
-import skadistats.clarity.model.state.NestedArrayState;
+import skadistats.clarity.model.state.EntityState;
+import skadistats.clarity.model.state.EntityStateFactory;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.OnInit;
 import skadistats.clarity.processor.sendtables.DTClasses;
@@ -47,7 +47,7 @@ public class TempEntities {
                 if (stream.readBitFlag()) {
                     cls = (S1DTClass) dtClasses.forClassId(stream.readUBitInt(dtClasses.getClassBits()) - 1);
                 }
-                NestedArrayState state = new NestedArrayState(cls);
+                EntityState state = EntityStateFactory.createForClass(cls);
                 fieldReader.readFields(stream, cls, state, false);
                 evTempEntity.raise(new Entity(
                         engineType,

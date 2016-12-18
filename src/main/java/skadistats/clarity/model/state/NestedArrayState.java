@@ -1,8 +1,8 @@
 package skadistats.clarity.model.state;
 
 import skadistats.clarity.ClarityException;
-import skadistats.clarity.decoder.Util;
 import skadistats.clarity.decoder.FieldType;
+import skadistats.clarity.decoder.Util;
 import skadistats.clarity.decoder.s2.field.FieldProperties;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.DTClass;
@@ -16,7 +16,7 @@ public class NestedArrayState implements EntityState {
     private final DTClass dtClass;
     private Object[] state;
 
-    public NestedArrayState(DTClass dtClass) {
+    NestedArrayState(DTClass dtClass) {
         this.dtClass = dtClass;
         this.state = new Object[dtClass.getSubStateLength()];
     }

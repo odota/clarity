@@ -16,7 +16,7 @@ import skadistats.clarity.model.EngineType;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.model.state.EntityState;
-import skadistats.clarity.model.state.NestedArrayState;
+import skadistats.clarity.model.state.EntityStateFactory;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.reader.OnReset;
 import skadistats.clarity.processor.reader.ResetPhase;
@@ -67,7 +67,7 @@ public class Entities {
 
     private class BaselineEntry {
         private ByteString rawBaseline;
-        private NestedArrayState baseline;
+        private EntityState baseline;
 
         public BaselineEntry(ByteString rawBaseline) {
             this.rawBaseline = rawBaseline;
@@ -193,7 +193,7 @@ public class Entities {
         if (be.baseline == null) {
             DTClass cls = dtClasses.forClassId(clsId);
             BitStream stream = BitStream.createBitStream(be.rawBaseline);
-            be.baseline = new NestedArrayState(cls);
+            be.baseline = EntityStateFactory.createForClass(cls);
             fieldReader.readFields(stream, cls, be.baseline, DEBUG_BASELINE);
         }
         return be.baseline;
