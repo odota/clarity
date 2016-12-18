@@ -1,11 +1,10 @@
 package skadistats.clarity.decoder.s2;
 
 import skadistats.clarity.decoder.s2.field.Field;
-import skadistats.clarity.decoder.FieldType;
-import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.state.Accessor;
 import skadistats.clarity.model.state.AccessorFactory;
+import skadistats.clarity.model.state.DumpEntry;
 
 import java.util.Comparator;
 import java.util.List;
@@ -76,24 +75,6 @@ public class Serializer implements AccessorFactory {
 //            }
 //        }
         return getFieldPathForNameInternal(fp, property);
-    }
-
-    public void collectDump(FieldPath fp, String namePrefix, List<DumpEntry> entries, Object[] state) {
-        for (int i = 0; i < fields.length; i++) {
-            if (state[i] != null) {
-                fp.path[fp.last] = i;
-                fields[i].collectDump(fp, namePrefix, entries, state);
-            }
-        }
-    }
-
-    public void collectFieldPaths(FieldPath fp, List<FieldPath> entries, Object[] state) {
-        for (int i = 0; i < fields.length; i++) {
-            if (state[i] != null) {
-                fp.path[fp.last] = i;
-                fields[i].collectFieldPaths(fp, entries, state);
-            }
-        }
     }
 
     @Override

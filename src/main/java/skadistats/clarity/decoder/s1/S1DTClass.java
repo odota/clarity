@@ -1,12 +1,12 @@
 package skadistats.clarity.decoder.s1;
 
+import skadistats.clarity.model.state.DumpEntry;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.state.Accessor;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,41 +103,6 @@ public class S1DTClass implements DTClass {
 
     public void setIndexMapping(int[] indexMapping) {
         this.indexMapping = indexMapping;
-    }
-
-    private static final ReentrantLock DEBUG_LOCK = new ReentrantLock();
-    private static final TextTable DEBUG_DUMPER = new TextTable.Builder()
-        .setFrame(TextTable.FRAME_COMPAT)
-        .addColumn("Idx", TextTable.Alignment.RIGHT)
-        .addColumn("Property")
-        .addColumn("Value")
-        .build();
-
-    @Override
-    public String dumpState(String title, EntityState entityState) {
-        DEBUG_LOCK.lock();
-        Object[] state = entityState.getState();
-        try {
-            DEBUG_DUMPER.clear();
-            DEBUG_DUMPER.setTitle(title);
-            for (int i = 0; i < state.length; i++) {
-                DEBUG_DUMPER.setData(i, 0, i);
-                DEBUG_DUMPER.setData(i, 1, receiveProps[i].getVarName());
-                DEBUG_DUMPER.setData(i, 2, state[i]);
-            }
-            return DEBUG_DUMPER.toString();
-        } finally {
-            DEBUG_LOCK.unlock();
-        }
-    }
-
-    @Override
-    public List<FieldPath> collectFieldPaths(Object[] state) {
-        ArrayList<FieldPath> result = new ArrayList<>(state.length);
-        for (int i = 0; i < state.length; i++) {
-            result.add(new FieldPath(i));
-        }
-        return result;
     }
 
 }

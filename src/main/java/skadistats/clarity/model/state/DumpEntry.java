@@ -1,8 +1,9 @@
-package skadistats.clarity.decoder.s2;
+package skadistats.clarity.model.state;
 
 import skadistats.clarity.model.FieldPath;
 
 public class DumpEntry {
+
     final String fieldPath;
     final String name;
     final String value;
@@ -12,4 +13,5 @@ public class DumpEntry {
         this.name = name;
         this.value = value.toString();
     }
+
 }

@@ -8,6 +8,9 @@ import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NestedArrayState implements EntityState {
 
     private final DTClass dtClass;
@@ -28,6 +31,67 @@ public class NestedArrayState implements EntityState {
     @Override
     public Cursor cursorForFieldPath(FieldPath fp) {
         return new CursorImpl(fp);
+    }
+
+    @Override
+    public List<DumpEntry> collectDump() {
+        List<DumpEntry> result = new ArrayList<>();
+        dumpInternal(dtClass, state, new FieldPath(), "", result);
+        return result;
+    }
+
+    private void dumpInternal(AccessorFactory factory, Object[] state, FieldPath fp, String namePrefix, List<DumpEntry> result) {
+        for (int i = 0; i < state.length; i++) {
+            if (state[i] == null) continue;
+
+            Accessor subAccessor = factory.getSubAccessor(i);
+            fp.path[fp.last] = i;
+            if (state[i] instanceof Object[]) {
+                fp.last++;
+                dumpInternal(
+                        subAccessor,
+                        (Object[]) state[i],
+                        fp,
+                        namePrefix + subAccessor.getNameSegment(i) + ".",
+                        result
+                );
+                fp.last--;
+            } else {
+                result.add(new DumpEntry(
+                        fp,
+                        namePrefix + subAccessor.getNameSegment(i),
+                        state[i]
+                ));
+            }
+        }
+    }
+
+    @Override
+    public List<FieldPath> collectFieldPaths() {
+        List<FieldPath> result = new ArrayList<>();
+        collectInternal(dtClass, state, new FieldPath(), result);
+        return result;
+    }
+
+    private void collectInternal(AccessorFactory factory, Object[] state, FieldPath fp, List<FieldPath> result) {
+        for (int i = 0; i < state.length; i++) {
+            if (state[i] == null) continue;
+
+            Accessor subAccessor = factory.getSubAccessor(i);
+            fp.path[fp.last] = i;
+            if (state[i] instanceof Object[]) {
+                fp.last++;
+                collectInternal(
+                        subAccessor,
+                        (Object[]) state[i],
+                        fp,
+                        result
+                );
+                fp.last--;
+            } else {
+                result.add(new FieldPath(fp));
+            }
+        }
     }
 
     @Override

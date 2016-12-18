@@ -1,5 +1,6 @@
 package skadistats.clarity.model;
 
+import skadistats.clarity.model.state.EntityDumper;
 import skadistats.clarity.model.state.EntityState;
 
 public class Entity {
@@ -89,7 +90,7 @@ public class Entity {
     @Override
     public String toString() {
         String title = "idx: " + index + ", serial: " + serial + ", class: " + dtClass.getDtName();
-        return dtClass.dumpState(title, state);
+        return EntityDumper.dump(title, state);
     }
 
 }

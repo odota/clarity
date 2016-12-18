@@ -15,9 +15,5 @@ public interface DTClass extends AccessorFactory {
     String getNameForFieldPath(FieldPath fp);
     FieldPath getFieldPathForName(String property);
 
-    List<FieldPath> collectFieldPaths(Object[] state);
-
-    String dumpState(String title, EntityState state);
-
 }
 
