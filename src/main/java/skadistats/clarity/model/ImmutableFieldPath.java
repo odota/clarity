@@ -23,6 +23,11 @@ public class ImmutableFieldPath implements FieldPath, Comparable<ImmutableFieldP
     }
 
     @Override
+    public int getLength() {
+        return path.length;
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < path.length; i++) {

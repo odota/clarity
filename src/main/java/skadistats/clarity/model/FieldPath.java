@@ -4,6 +4,7 @@ public interface FieldPath {
 
     int getElement(int i);
     int getLast();
+    int getLength();
 
 }
 

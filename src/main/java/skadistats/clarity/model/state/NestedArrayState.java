@@ -102,9 +102,9 @@ public class NestedArrayState implements EntityState {
 
         private CursorImpl(FieldPath fp) {
             this.fieldPath = fp;
-            this.accessor = new Accessor[fp.getLast() + 1];
+            this.accessor = new Accessor[fp.getLength()];
             AccessorFactory factory = dtClass;
-            for (int i = 0; i <= fp.getLast(); i++) {
+            for (int i = 0; i < fp.getLength(); i++) {
                 Accessor subAccessor = factory.getSubAccessor(fp.getElement(i));
                 accessor[i] = subAccessor;
                 factory = subAccessor;
@@ -114,7 +114,7 @@ public class NestedArrayState implements EntityState {
         @Override
         public <T> T getValue() {
             Object[] s = state;
-            for (int n = 0; n <= fieldPath.getLast(); n++) {
+            for (int n = 0; n < fieldPath.getLength(); n++) {
                 Accessor a = accessor[n];
                 Object si = s[fieldPath.getElement(n)];
 
@@ -144,7 +144,7 @@ public class NestedArrayState implements EntityState {
         @Override
         public void setValue(Object data) {
             Object[] s = state;
-            for (int n = 0; n <= fieldPath.getLast(); n++) {
+            for (int n = 0; n < fieldPath.getLength(); n++) {
                 Accessor a = accessor[n];
                 Object si = s[fieldPath.getElement(n)];
 
