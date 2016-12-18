@@ -19,10 +19,13 @@ public class SimpleField extends Field {
         unpacker = S2UnpackerFactory.createUnpacker(properties, properties.getType().getBaseType());
         accessor = new Accessor() {
             @Override
+            public String getNameSegment(int i) {
+                return getProperties().getName();
+            }
+            @Override
             public Unpacker getUnpacker() {
                 return unpacker;
             }
-
             @Override
             public FieldType getType() {
                 return getProperties().getType();

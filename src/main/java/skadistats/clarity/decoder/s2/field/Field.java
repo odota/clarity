@@ -15,7 +15,6 @@ public abstract class Field {
     }
 
     public abstract void accumulateName(FieldPath fp, int pos, List<String> parts);
-
     public abstract FieldPath getFieldPathForName(FieldPath fp, String property);
     public abstract void collectDump(FieldPath fp, String namePrefix, List<DumpEntry> entries, Object[] state);
     public abstract void collectFieldPaths(FieldPath fp, List<FieldPath> entries, Object[] state);

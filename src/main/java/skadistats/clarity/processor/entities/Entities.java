@@ -40,7 +40,7 @@ public class Entities {
     private static final Logger log = PrintfLoggerFactory.getLogger(LogChannel.entities);
 
     private static final boolean DEBUG_ENTITY = false;
-    private static final boolean DEBUG_BASELINE = false;
+    private static final boolean DEBUG_BASELINE = true;
 
     private final Map<Integer, BaselineEntry> baselineEntries = new HashMap<>();
     private Entity[] entities;

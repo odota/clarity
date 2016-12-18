@@ -7,14 +7,14 @@ import skadistats.clarity.model.FieldPath;
 
 public interface Cursor {
 
-    <T> T getValue();
-
     FieldPath getFieldPath();
 
-    Unpacker getUnpacker();
-    FieldType getType();
-    FieldProperties getFieldProperties();
-
+    <T> T getValue();
     void setValue(Object data);
+
+    Unpacker getUnpacker();
+    FieldType getFieldType();
+    FieldProperties getFieldProperties();
+    String getPropertyName();
 
 }

@@ -132,6 +132,19 @@ public class NestedArrayState implements EntityState {
         }
 
         @Override
+        public String getPropertyName() {
+            StringBuilder b = new StringBuilder();
+            for (int n = 0; n <= fieldPath.last; n++) {
+                Accessor a = accessor[n];
+                if (b.length() != 0) {
+                    b.append('.');
+                }
+                b.append(a.getNameSegment(fieldPath.path[n]));
+            }
+            return b.toString();
+        }
+
+        @Override
         public FieldPath getFieldPath() {
             return fieldPath;
         }
@@ -142,7 +155,7 @@ public class NestedArrayState implements EntityState {
         }
 
         @Override
-        public FieldType getType() {
+        public FieldType getFieldType() {
             return accessor[fieldPath.last].getType();
         }
 

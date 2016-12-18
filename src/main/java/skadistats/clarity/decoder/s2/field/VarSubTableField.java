@@ -26,6 +26,10 @@ public class VarSubTableField extends Field {
 
         elementAccessor = new Accessor() {
             @Override
+            public String getNameSegment(int i) {
+                return Util.arrayIdxToString(i);
+            }
+            @Override
             public Unpacker getUnpacker() {
                 throw new UnsupportedOperationException();
             }
@@ -44,6 +48,10 @@ public class VarSubTableField extends Field {
         };
 
         accessor = new Accessor() {
+            @Override
+            public String getNameSegment(int i) {
+                return getProperties().getName();
+            }
             @Override
             public boolean isVariableArray() {
                 return true;

@@ -24,6 +24,10 @@ public class FixedSubTableField extends Field {
 
         accessor = new Accessor() {
             @Override
+            public String getNameSegment(int i) {
+                return getProperties().getName();
+            }
+            @Override
             public boolean isPointer() {
                 return true;
             }

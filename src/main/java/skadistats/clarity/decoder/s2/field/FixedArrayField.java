@@ -29,6 +29,10 @@ public class FixedArrayField extends Field {
         elementUnpacker = S2UnpackerFactory.createUnpacker(properties, elementType.getBaseType());
         elementAccessor = new Accessor() {
             @Override
+            public String getNameSegment(int i) {
+                return Util.arrayIdxToString(i);
+            }
+            @Override
             public Unpacker getUnpacker() {
                 return elementUnpacker;
             }
@@ -39,6 +43,10 @@ public class FixedArrayField extends Field {
         };
 
         accessor = new Accessor() {
+            @Override
+            public String getNameSegment(int i) {
+                return getProperties().getName();
+            }
             @Override
             public Accessor getSubAccessor(int i) {
                 return elementAccessor;

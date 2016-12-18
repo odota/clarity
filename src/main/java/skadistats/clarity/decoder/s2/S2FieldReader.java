@@ -4,7 +4,6 @@ import skadistats.clarity.ClarityException;
 import skadistats.clarity.decoder.FieldReader;
 import skadistats.clarity.decoder.bitstream.BitStream;
 import skadistats.clarity.decoder.s2.field.FieldProperties;
-import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.state.Cursor;
@@ -74,7 +73,7 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
                 Cursor c = cursors[r];
                 Unpacker unpacker = c.getUnpacker();
                 if (unpacker == null) {
-                    throw new ClarityException("no unpacker for field %s with type %s!", c.getFieldPath(), c.getType());
+                    throw new ClarityException("no unpacker for field %s with type %s!", c.getFieldPath(), c.getFieldType());
                 }
                 int offsBefore = bs.pos();
                 Object data = unpacker.unpack(bs);
@@ -83,13 +82,13 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
                 if (debug) {
                     FieldProperties props = c.getFieldProperties();
                     dataDebugTable.setData(r, 0, c.getFieldPath());
-                    dataDebugTable.setData(r, 1, dtClass.getNameForFieldPath(c.getFieldPath()));
+                    dataDebugTable.setData(r, 1, c.getPropertyName());
                     dataDebugTable.setData(r, 2, props != null ? props.getLowValue() : "-");
                     dataDebugTable.setData(r, 3, props != null ? props.getHighValue() : "-");
                     dataDebugTable.setData(r, 4, props != null ? props.getBitCount() : "-");
                     dataDebugTable.setData(r, 5, props != null && props.getEncodeFlags() != null ? Integer.toHexString(props.getEncodeFlags()) : "-");
                     dataDebugTable.setData(r, 6, unpacker.getClass().getSimpleName());
-                    dataDebugTable.setData(r, 7, String.format("%s%s", c.getType().toString(true), props != null && props.getEncoderType() != null ? String.format(" {%s}", props.getEncoderType()) : ""));
+                    dataDebugTable.setData(r, 7, String.format("%s%s", c.getFieldType().toString(true), props != null && props.getEncoderType() != null ? String.format(" {%s}", props.getEncoderType()) : ""));
                     dataDebugTable.setData(r, 8, data);
                     dataDebugTable.setData(r, 9, bs.pos() - offsBefore);
                     dataDebugTable.setData(r, 10, bs.toString(offsBefore, bs.pos()));

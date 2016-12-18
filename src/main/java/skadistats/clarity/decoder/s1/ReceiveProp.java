@@ -13,19 +13,24 @@ public class ReceiveProp {
 
     private final Accessor accessor;
 
-    public ReceiveProp(final SendProp sendProp, String name) {
+    public ReceiveProp(SendProp sendProp, String name) {
         this.sendProp = sendProp;
         this.name = name;
 
         accessor = new Accessor() {
             @Override
+            public String getNameSegment(int i) {
+                return ReceiveProp.this.name;
+            }
+
+            @Override
             public Unpacker getUnpacker() {
-                return sendProp.getUnpacker();
+                return ReceiveProp.this.sendProp.getUnpacker();
             }
 
             @Override
             public FieldType getType() {
-                return FieldType.forString(sendProp.getType().name());
+                return FieldType.forString(ReceiveProp.this.sendProp.getType().name());
             }
         };
     }

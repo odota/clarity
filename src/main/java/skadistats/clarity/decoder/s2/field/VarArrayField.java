@@ -33,6 +33,10 @@ public class VarArrayField extends Field {
 
         elementAccessor = new Accessor() {
             @Override
+            public String getNameSegment(int i) {
+                return Util.arrayIdxToString(i);
+            }
+            @Override
             public Unpacker getUnpacker() {
                 return elementUnpacker;
             }
@@ -43,6 +47,11 @@ public class VarArrayField extends Field {
         };
 
         accessor = new Accessor() {
+            @Override
+            public String getNameSegment(int i) {
+                return getProperties().getName();
+            }
+
             @Override
             public boolean isVariableArray() {
                 return true;

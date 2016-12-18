@@ -4,7 +4,9 @@ import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.s2.field.FieldProperties;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 
-public class Accessor implements AccessorFactory {
+public abstract class Accessor implements AccessorFactory {
+
+    public abstract String getNameSegment(int i);
 
     public Unpacker getUnpacker() {
         throw new UnsupportedOperationException();
