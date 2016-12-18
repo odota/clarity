@@ -44,6 +44,10 @@ public class VarSubTableField extends Field {
 
         accessor = new Accessor() {
             @Override
+            public boolean isVariableArray() {
+                return true;
+            }
+            @Override
             public Unpacker getUnpacker() {
                 return baseUnpacker;
             }

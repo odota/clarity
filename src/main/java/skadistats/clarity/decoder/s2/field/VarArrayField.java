@@ -43,6 +43,10 @@ public class VarArrayField extends Field {
 
         accessor = new Accessor() {
             @Override
+            public boolean isVariableArray() {
+                return true;
+            }
+            @Override
             public Unpacker getUnpacker() {
                 return baseUnpacker;
             }

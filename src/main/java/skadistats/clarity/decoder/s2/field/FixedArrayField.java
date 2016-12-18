@@ -46,10 +46,6 @@ public class FixedArrayField extends Field {
             public Integer getSubStateLength() {
                 return FixedArrayField.this.length;
             }
-            @Override
-            public Integer getElementNum(int i) {
-                return i;
-            }
         };
     }
 

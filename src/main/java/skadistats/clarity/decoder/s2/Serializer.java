@@ -134,9 +134,4 @@ public class Serializer implements AccessorFactory {
         return fields.length;
     }
 
-    @Override
-    public Integer getElementNum(int i) {
-        return i;
-    }
-
 }

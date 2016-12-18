@@ -23,6 +23,10 @@ public class FixedSubTableField extends Field {
 
         accessor = new Accessor() {
             @Override
+            public boolean isPointer() {
+                return true;
+            }
+            @Override
             public Unpacker getUnpacker() {
                 return baseUnpacker;
             }

@@ -13,6 +13,14 @@ public class Accessor implements AccessorFactory {
         throw new UnsupportedOperationException();
     }
 
+    public boolean isPointer() {
+        return false;
+    }
+
+    public boolean isVariableArray() {
+        return false;
+    }
+
     @Override
     public Accessor getSubAccessor(int i) {
         throw new UnsupportedOperationException();
@@ -20,11 +28,6 @@ public class Accessor implements AccessorFactory {
 
     @Override
     public Integer getSubStateLength() {
-        return null;
-    }
-
-    @Override
-    public Integer getElementNum(int i) {
         return null;
     }
 
