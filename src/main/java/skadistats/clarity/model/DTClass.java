@@ -1,10 +1,11 @@
 package skadistats.clarity.model;
 
+import skadistats.clarity.model.state.AccessorFactory;
 import skadistats.clarity.model.state.EntityState;
 
 import java.util.List;
 
-public interface DTClass {
+public interface DTClass extends AccessorFactory {
 
     String getDtName();
 

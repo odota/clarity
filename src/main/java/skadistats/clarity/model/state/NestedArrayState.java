@@ -2,8 +2,7 @@ package skadistats.clarity.model.state;
 
 import skadistats.clarity.ClarityException;
 import skadistats.clarity.decoder.Util;
-import skadistats.clarity.decoder.s2.S2DTClass;
-import skadistats.clarity.decoder.s2.field.FieldType;
+import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
@@ -15,7 +14,7 @@ public class NestedArrayState implements EntityState {
 
     public NestedArrayState(DTClass dtClass) {
         this.dtClass = dtClass;
-        this.state = new Object[((S2DTClass) dtClass).getSerializer().getSubStateLength()];
+        this.state = new Object[dtClass.getSubStateLength()];
     }
 
     @Override
@@ -43,7 +42,7 @@ public class NestedArrayState implements EntityState {
         private CursorImpl(FieldPath fp) {
             this.fieldPath = new FieldPath(fp);
             this.accessor = new Accessor[fp.last + 1];
-            AccessorFactory factory = ((S2DTClass) dtClass).getSerializer();
+            AccessorFactory factory = dtClass;
             for (int i = 0; i <= fp.last; i++) {
                 Accessor subAccessor = factory.getSubAccessor(fp.path[i]);
                 accessor[i] = subAccessor;

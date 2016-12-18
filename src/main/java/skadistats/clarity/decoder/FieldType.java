@@ -1,4 +1,4 @@
-package skadistats.clarity.decoder.s2.field;
+package skadistats.clarity.decoder;
 
 import skadistats.clarity.ClarityException;
 

@@ -1,5 +1,6 @@
 package skadistats.clarity.decoder.s2.field;
 
+import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.s2.Serializer;
 
 public class FieldProperties {

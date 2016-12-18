@@ -4,10 +4,9 @@ import skadistats.clarity.ClarityException;
 import skadistats.clarity.decoder.FieldReader;
 import skadistats.clarity.decoder.bitstream.BitStream;
 import skadistats.clarity.decoder.s2.field.FieldProperties;
-import skadistats.clarity.decoder.s2.field.FieldType;
+import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
-import skadistats.clarity.model.state.CursorGenerator;
 import skadistats.clarity.model.state.Cursor;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
@@ -64,7 +63,11 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
                 if (op == FieldOpType.FieldPathEncodeFinish) {
                     break;
                 }
-                cursors[n++] = state.cursorForFieldPath(fp);
+
+                FieldPath fpCopy = new FieldPath(fp);
+                fieldPaths[n] = fpCopy;
+                cursors[n] = state.cursorForFieldPath(fpCopy);
+                n++;
             }
 
             for (int r = 0; r < n; r++) {

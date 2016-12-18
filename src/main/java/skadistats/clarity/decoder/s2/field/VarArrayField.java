@@ -1,6 +1,7 @@
 package skadistats.clarity.decoder.s2.field;
 
 import skadistats.clarity.ClarityException;
+import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.Util;
 import skadistats.clarity.decoder.s2.DumpEntry;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;

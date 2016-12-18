@@ -1,10 +1,11 @@
 package skadistats.clarity.decoder.s2;
 
 import skadistats.clarity.decoder.s2.field.Field;
-import skadistats.clarity.decoder.s2.field.FieldType;
+import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.Accessor;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 
@@ -34,6 +35,16 @@ public class S2DTClass implements DTClass {
     @Override
     public String getDtName() {
         return serializer.getId().getName();
+    }
+
+    @Override
+    public Accessor getSubAccessor(int i) {
+        return serializer.getSubAccessor(i);
+    }
+
+    @Override
+    public Integer getSubStateLength() {
+        return serializer.getSubStateLength();
     }
 
     public Serializer getSerializer() {

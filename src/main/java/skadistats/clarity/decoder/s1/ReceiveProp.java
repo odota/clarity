@@ -2,15 +2,36 @@ package skadistats.clarity.decoder.s1;
 
 
 import skadistats.clarity.decoder.bitstream.BitStream;
+import skadistats.clarity.decoder.FieldType;
+import skadistats.clarity.decoder.unpacker.Unpacker;
+import skadistats.clarity.model.state.Accessor;
 
 public class ReceiveProp {
 
     private final SendProp sendProp;
     private final String name;
 
-    public ReceiveProp(SendProp sendProp, String name) {
+    private final Accessor accessor;
+
+    public ReceiveProp(final SendProp sendProp, String name) {
         this.sendProp = sendProp;
         this.name = name;
+
+        accessor = new Accessor() {
+            @Override
+            public Unpacker getUnpacker() {
+                return sendProp.getUnpacker();
+            }
+
+            @Override
+            public FieldType getType() {
+                return FieldType.forString(sendProp.getType().name());
+            }
+        };
+    }
+
+    public Accessor getAccessor() {
+        return accessor;
     }
 
     public SendProp getSendProp() {

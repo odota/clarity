@@ -13,11 +13,11 @@ public abstract class FieldReader<T extends DTClass> {
     public static final int MAX_PROPERTIES = 0x3FFF;
     public static PrintStream DEBUG_STREAM = System.out;
 
+    protected final FieldPath[] fieldPaths = new FieldPath[MAX_PROPERTIES];
     protected final Cursor[] cursors = new Cursor[MAX_PROPERTIES];
 
     public FieldPath[] getFieldPaths() {
-        // TODO
-        return null;
+        return fieldPaths;
     }
 
     public abstract int readFields(BitStream bs, T dtClass, EntityState state, boolean debug);

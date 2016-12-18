@@ -2,6 +2,8 @@ package skadistats.clarity.decoder.s1;
 
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.state.Accessor;
+import skadistats.clarity.model.state.AccessorFactory;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 
@@ -34,6 +36,16 @@ public class S1DTClass implements DTClass {
     @Override
     public void setClassId(int classId) {
         this.classId = classId;
+    }
+
+    @Override
+    public Accessor getSubAccessor(int i) {
+        return receiveProps[i].getAccessor();
+    }
+
+    @Override
+    public Integer getSubStateLength() {
+        return receiveProps.length;
     }
 
     @Override

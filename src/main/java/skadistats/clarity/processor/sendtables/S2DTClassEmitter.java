@@ -8,7 +8,7 @@ import skadistats.clarity.decoder.s2.Serializer;
 import skadistats.clarity.decoder.s2.SerializerId;
 import skadistats.clarity.decoder.s2.field.Field;
 import skadistats.clarity.decoder.s2.field.FieldProperties;
-import skadistats.clarity.decoder.s2.field.FieldType;
+import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.s2.field.FixedArrayField;
 import skadistats.clarity.decoder.s2.field.FixedSubTableField;
 import skadistats.clarity.decoder.s2.field.SimpleField;

@@ -41,25 +41,22 @@ public class TempEntities {
         if (evTempEntity.isListenedTo()) {
             BitStream stream = BitStream.createBitStream(message.getEntityData());
             S1DTClass cls = null;
-            ReceiveProp[] receiveProps = null;
             int count = message.getNumEntries();
             while (count-- > 0) {
                 stream.readUBitInt(1); // seems to be always 0
                 if (stream.readBitFlag()) {
                     cls = (S1DTClass) dtClasses.forClassId(stream.readUBitInt(dtClasses.getClassBits()) - 1);
-                    receiveProps = cls.getReceiveProps();
                 }
-                // TODO
-//                Object[] state = new Object[receiveProps.length];
-//                fieldReader.readFields(stream, cls, state, false);
-//                evTempEntity.raise(new Entity(
-//                        engineType,
-//                        0,
-//                        0,
-//                        cls,
-//                        true,
-//                        new NestedArrayState(cls, state))
-//                );
+                NestedArrayState state = new NestedArrayState(cls);
+                fieldReader.readFields(stream, cls, state, false);
+                evTempEntity.raise(new Entity(
+                        engineType,
+                        0,
+                        0,
+                        cls,
+                        true,
+                        state)
+                );
             }
         }
     }

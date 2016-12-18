@@ -1,6 +1,6 @@
 package skadistats.clarity.model.state;
 
-import skadistats.clarity.decoder.s2.field.FieldType;
+import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
 
