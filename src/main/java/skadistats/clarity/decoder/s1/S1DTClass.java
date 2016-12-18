@@ -3,7 +3,6 @@ package skadistats.clarity.decoder.s1;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.state.Accessor;
-import skadistats.clarity.model.state.AccessorFactory;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 
@@ -49,11 +48,6 @@ public class S1DTClass implements DTClass {
     }
 
     @Override
-    public Object[] getEmptyStateArray() {
-        return new Object[receiveProps.length];
-    }
-
-    @Override
     public String getNameForFieldPath(FieldPath fp) {
         return this.receiveProps[fp.path[0]].getVarName();
     }
@@ -62,11 +56,6 @@ public class S1DTClass implements DTClass {
     public FieldPath getFieldPathForName(String name){
         Integer idx = this.propsByName.get(name);
         return idx != null ? new FieldPath(idx.intValue()) : null;
-    }
-
-    @Override
-    public <T> T getValueForFieldPath(FieldPath fp, Object[] state) {
-        return (T) state[fp.path[0]];
     }
 
     public S1DTClass getSuperClass() {

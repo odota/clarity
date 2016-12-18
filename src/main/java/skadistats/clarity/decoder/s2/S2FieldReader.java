@@ -56,7 +56,7 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
                 op.execute(fp, bs);
                 if (debug) {
                     opDebugTable.setData(n, 0, op);
-                    opDebugTable.setData(n, 1, fp);
+                    opDebugTable.setData(n, 1, fp.toString());
                     opDebugTable.setData(n, 2, bs.pos() - offsBefore);
                     opDebugTable.setData(n, 3, bs.toString(offsBefore, bs.pos()));
                 }
@@ -81,17 +81,15 @@ public class S2FieldReader extends FieldReader<S2DTClass> {
                 c.setValue(data);
 
                 if (debug) {
-                    fp = c.getFieldPath();
-                    FieldProperties props = dtClass.getFieldForFieldPath(fp).getProperties();
-                    FieldType type = dtClass.getTypeForFieldPath(fp);
-                    dataDebugTable.setData(r, 0, fp);
+                    FieldProperties props = c.getFieldProperties();
+                    dataDebugTable.setData(r, 0, c.getFieldPath());
                     dataDebugTable.setData(r, 1, dtClass.getNameForFieldPath(c.getFieldPath()));
-                    dataDebugTable.setData(r, 2, props.getLowValue());
-                    dataDebugTable.setData(r, 3, props.getHighValue());
-                    dataDebugTable.setData(r, 4, props.getBitCount());
-                    dataDebugTable.setData(r, 5, props.getEncodeFlags() != null ? Integer.toHexString(props.getEncodeFlags()) : "-");
+                    dataDebugTable.setData(r, 2, props != null ? props.getLowValue() : "-");
+                    dataDebugTable.setData(r, 3, props != null ? props.getHighValue() : "-");
+                    dataDebugTable.setData(r, 4, props != null ? props.getBitCount() : "-");
+                    dataDebugTable.setData(r, 5, props != null && props.getEncodeFlags() != null ? Integer.toHexString(props.getEncodeFlags()) : "-");
                     dataDebugTable.setData(r, 6, unpacker.getClass().getSimpleName());
-                    dataDebugTable.setData(r, 7, String.format("%s%s", type.toString(true), props.getEncoderType() != null ? String.format(" {%s}", props.getEncoderType()) : ""));
+                    dataDebugTable.setData(r, 7, String.format("%s%s", c.getType().toString(true), props != null && props.getEncoderType() != null ? String.format(" {%s}", props.getEncoderType()) : ""));
                     dataDebugTable.setData(r, 8, data);
                     dataDebugTable.setData(r, 9, bs.pos() - offsBefore);
                     dataDebugTable.setData(r, 10, bs.toString(offsBefore, bs.pos()));

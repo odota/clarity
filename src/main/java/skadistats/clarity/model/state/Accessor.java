@@ -1,6 +1,7 @@
 package skadistats.clarity.model.state;
 
 import skadistats.clarity.decoder.FieldType;
+import skadistats.clarity.decoder.s2.field.FieldProperties;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 
 public class Accessor implements AccessorFactory {
@@ -11,6 +12,10 @@ public class Accessor implements AccessorFactory {
 
     public FieldType getType() {
         throw new UnsupportedOperationException();
+    }
+
+    public FieldProperties getFieldProperties() {
+        return null;
     }
 
     public boolean isPointer() {

@@ -3,6 +3,7 @@ package skadistats.clarity.model.state;
 import skadistats.clarity.ClarityException;
 import skadistats.clarity.decoder.Util;
 import skadistats.clarity.decoder.FieldType;
+import skadistats.clarity.decoder.s2.field.FieldProperties;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
@@ -48,16 +49,6 @@ public class NestedArrayState implements EntityState {
                 accessor[i] = subAccessor;
                 factory = subAccessor;
             }
-        }
-
-        @Override
-        public Unpacker getUnpacker() {
-            return accessor[fieldPath.last].getUnpacker();
-        }
-
-        @Override
-        public FieldType getType() {
-            return accessor[fieldPath.last].getType();
         }
 
         @Override
@@ -140,10 +131,24 @@ public class NestedArrayState implements EntityState {
             return (Object[]) state[i];
         }
 
-
         @Override
         public FieldPath getFieldPath() {
             return fieldPath;
+        }
+
+        @Override
+        public Unpacker getUnpacker() {
+            return accessor[fieldPath.last].getUnpacker();
+        }
+
+        @Override
+        public FieldType getType() {
+            return accessor[fieldPath.last].getType();
+        }
+
+        @Override
+        public FieldProperties getFieldProperties() {
+            return accessor[fieldPath.last].getFieldProperties();
         }
 
     }

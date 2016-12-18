@@ -51,11 +51,6 @@ public class S2DTClass implements DTClass {
         return serializer;
     }
 
-    @Override
-    public Object[] getEmptyStateArray() {
-        return serializer.getInitialState();
-    }
-
     public String getNameForFieldPath(FieldPath fp) {
         List<String> parts = new ArrayList<>();
         serializer.accumulateName(fp, 0, parts);
@@ -67,27 +62,6 @@ public class S2DTClass implements DTClass {
             b.append(part);
         }
         return b.toString();
-    }
-
-    public Unpacker getUnpackerForFieldPath(FieldPath fp) {
-        return serializer.getUnpackerForFieldPath(fp, 0);
-    }
-
-    public Field getFieldForFieldPath(FieldPath fp) {
-        return serializer.getFieldForFieldPath(fp, 0);
-    }
-
-    public FieldType getTypeForFieldPath(FieldPath fp) {
-        return serializer.getTypeForFieldPath(fp, 0);
-    }
-
-    @Override
-    public <T> T getValueForFieldPath(FieldPath fp, Object[] state) {
-        return (T) serializer.getValueForFieldPath(fp, 0, state);
-    }
-
-    public void setValueForFieldPath(FieldPath fp, Object[] state, Object value) {
-        serializer.setValueForFieldPath(fp, 0, state, value);
     }
 
     @Override

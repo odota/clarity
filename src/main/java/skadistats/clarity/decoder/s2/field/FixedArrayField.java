@@ -56,49 +56,12 @@ public class FixedArrayField extends Field {
     }
 
     @Override
-    public Object getInitialState() {
-        return new Object[length];
-    }
-
-    @Override
     public void accumulateName(FieldPath fp, int pos, List<String> parts) {
         assert fp.last == pos || fp.last == pos - 1;
         addBasePropertyName(parts);
         if (fp.last == pos) {
             parts.add(Util.arrayIdxToString(fp.path[pos]));
         }
-    }
-
-    @Override
-    public Unpacker getUnpackerForFieldPath(FieldPath fp, int pos) {
-        assert fp.last == pos;
-        return elementUnpacker;
-    }
-
-    @Override
-    public Field getFieldForFieldPath(FieldPath fp, int pos) {
-        assert fp.last == pos;
-        return this;
-    }
-
-    @Override
-    public FieldType getTypeForFieldPath(FieldPath fp, int pos) {
-        assert fp.last == pos;
-        return properties.getType();
-    }
-
-    @Override
-    public void setValueForFieldPath(FieldPath fp, int pos, Object[] state, Object value) {
-        assert fp.last == pos;
-        Object[] subState = (Object[]) state[fp.path[pos - 1]];
-        subState[fp.path[pos]] = value;
-    }
-
-    @Override
-    public Object getValueForFieldPath(FieldPath fp, int pos, Object[] state) {
-        assert fp.last == pos;
-        Object[] subState = (Object[]) state[fp.path[pos - 1]];
-        return subState[fp.path[pos]];
     }
 
     @Override

@@ -12,12 +12,8 @@ public interface DTClass extends AccessorFactory {
     int getClassId();
     void setClassId(int classId);
 
-    Object[] getEmptyStateArray();
-
     String getNameForFieldPath(FieldPath fp);
     FieldPath getFieldPathForName(String property);
-
-    <T> T getValueForFieldPath(FieldPath fp, Object[] state);
 
     List<FieldPath> collectFieldPaths(Object[] state);
 

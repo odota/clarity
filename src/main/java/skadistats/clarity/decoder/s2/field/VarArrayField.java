@@ -68,61 +68,11 @@ public class VarArrayField extends Field {
     }
 
     @Override
-    public Object getInitialState() {
-        return null;
-    }
-
-    @Override
     public void accumulateName(FieldPath fp, int pos, List<String> parts) {
         assert fp.last == pos || fp.last == pos - 1;
         addBasePropertyName(parts);
         if (fp.last == pos) {
             parts.add(Util.arrayIdxToString(fp.path[pos]));
-        }
-    }
-
-    @Override
-    public Unpacker getUnpackerForFieldPath(FieldPath fp, int pos) {
-        assert fp.last == pos || fp.last == pos - 1;
-        if (pos == fp.last) {
-            return elementUnpacker;
-        } else {
-            return baseUnpacker;
-        }
-    }
-
-    @Override
-    public Field getFieldForFieldPath(FieldPath fp, int pos) {
-        assert fp.last == pos || fp.last == pos - 1;
-        return this;
-    }
-
-    @Override
-    public FieldType getTypeForFieldPath(FieldPath fp, int pos) {
-        assert fp.last == pos || fp.last == pos - 1;
-        if (pos == fp.last) {
-            return properties.getType().getGenericType();
-        } else {
-            return properties.getType();
-        }
-    }
-
-    @Override
-    public Object getValueForFieldPath(FieldPath fp, int pos, Object[] state) {
-        assert fp.last == pos;
-        Object[] subState = (Object[]) state[fp.path[pos - 1]];
-        return subState[fp.path[pos]];
-    }
-
-    @Override
-    public void setValueForFieldPath(FieldPath fp, int pos, Object[] state, Object value) {
-        assert fp.last == pos || fp.last == pos - 1;
-        int i = fp.path[pos - 1];
-        if (fp.last == pos) {
-            Object[] subState = ensureSubStateCapacity(state, i, fp.path[pos] + 1, false);
-            subState[fp.path[pos]] = value;
-        } else {
-            ensureSubStateCapacity(state, i, (Integer) value, true);
         }
     }
 

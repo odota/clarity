@@ -69,11 +69,6 @@ public class VarSubTableField extends Field {
     }
 
     @Override
-    public Object getInitialState() {
-        return null;
-    }
-
-    @Override
     public void accumulateName(FieldPath fp, int pos, List<String> parts) {
         addBasePropertyName(parts);
         if (fp.last != pos - 1) {
@@ -81,52 +76,6 @@ public class VarSubTableField extends Field {
             if (fp.last != pos) {
                 properties.getSerializer().accumulateName(fp, pos + 1, parts);
             }
-        }
-    }
-
-    @Override
-    public Unpacker getUnpackerForFieldPath(FieldPath fp, int pos) {
-        if (fp.last >= pos + 1) {
-            return properties.getSerializer().getUnpackerForFieldPath(fp, pos + 1);
-        } else {
-            return baseUnpacker;
-        }
-    }
-
-    @Override
-    public Field getFieldForFieldPath(FieldPath fp, int pos) {
-        if (fp.last >= pos + 1) {
-            return properties.getSerializer().getFieldForFieldPath(fp, pos + 1);
-        } else {
-            return this;
-        }
-    }
-
-    @Override
-    public FieldType getTypeForFieldPath(FieldPath fp, int pos) {
-        if (fp.last >= pos + 1) {
-            return properties.getSerializer().getTypeForFieldPath(fp, pos + 1);
-        } else {
-            return properties.getType();
-        }
-    }
-
-    @Override
-    public Object getValueForFieldPath(FieldPath fp, int pos, Object[] state) {
-        assert fp.last >= pos + 1;
-        Object[] subState = (Object[]) state[fp.path[pos - 1]];
-        return properties.getSerializer().getValueForFieldPath(fp, pos + 1, (Object[]) subState[fp.path[pos]]);
-    }
-
-    @Override
-    public void setValueForFieldPath(FieldPath fp, int pos, Object[] state, Object value) {
-        int i = fp.path[pos - 1];
-        int j = fp.path[pos];
-        if (fp.last >= pos + 1) {
-            Object[] subState = ensureSubStateCapacity(state, i, j + 1, false);
-            properties.getSerializer().setValueForFieldPath(fp, pos + 1, (Object[]) subState[j], value);
-        } else {
-            ensureSubStateCapacity(state, i, (Integer) value, true);
         }
     }
 

@@ -36,44 +36,9 @@ public class SimpleField extends Field {
     }
 
     @Override
-    public Object getInitialState() {
-        return null;
-    }
-
-    @Override
     public void accumulateName(FieldPath fp, int pos, List<String> parts) {
         assert fp.last == pos - 1;
         addBasePropertyName(parts);
-    }
-
-    @Override
-    public Unpacker getUnpackerForFieldPath(FieldPath fp, int pos) {
-        assert fp.last == pos - 1;
-        return unpacker;
-    }
-
-    @Override
-    public Field getFieldForFieldPath(FieldPath fp, int pos) {
-        assert fp.last == pos - 1;
-        return this;
-    }
-
-    @Override
-    public FieldType getTypeForFieldPath(FieldPath fp, int pos) {
-        assert fp.last == pos - 1;
-        return properties.getType();
-    }
-
-    @Override
-    public Object getValueForFieldPath(FieldPath fp, int pos, Object[] state) {
-        assert fp.last == pos - 1;
-        return state[fp.path[pos - 1]];
-    }
-
-    @Override
-    public void setValueForFieldPath(FieldPath fp, int pos, Object[] state, Object value) {
-        assert fp.last == pos - 1;
-        state[fp.path[pos - 1]] = value;
     }
 
     @Override
