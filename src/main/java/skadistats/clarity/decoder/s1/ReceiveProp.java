@@ -19,15 +19,17 @@ public class ReceiveProp {
 
         accessor = new Accessor() {
             @Override
+            public int getNeededMemorySize() {
+                return getUnpacker().getNeededMemorySize();
+            }
+            @Override
             public String getNameSegment(int i) {
                 return ReceiveProp.this.name;
             }
-
             @Override
             public Unpacker getUnpacker() {
                 return ReceiveProp.this.sendProp.getUnpacker();
             }
-
             @Override
             public FieldType getType() {
                 return FieldType.forString(ReceiveProp.this.sendProp.getType().name());

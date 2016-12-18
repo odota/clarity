@@ -7,12 +7,12 @@ import skadistats.clarity.model.state.AccessorFactory;
 
 import java.util.List;
 
-public class Serializer implements AccessorFactory, AddressLayoutable {
+public class Serializer implements AccessorFactory {
 
     private final SerializerId id;
     private final Field[] fields;
     private final int[] offsets;
-    private final int sizeOf;
+    private final int memoryRequirement;
 
     public Serializer(SerializerId id, Field[] fields) {
         this.id = id;
@@ -22,10 +22,9 @@ public class Serializer implements AccessorFactory, AddressLayoutable {
         int o = 0;
         for (int i = 0; i < fields.length; i++) {
             offsets[i] = o;
-            o += fields[i].sizeOf();
+            o += fields[i].getAccessor().getNeededMemorySize();
         }
-        sizeOf = o;
-
+        memoryRequirement = o;
     }
 
     public SerializerId getId() {
@@ -76,8 +75,8 @@ public class Serializer implements AccessorFactory, AddressLayoutable {
     }
 
     @Override
-    public int sizeOf() {
-        return sizeOf;
+    public int getNeededMemorySize() {
+        return memoryRequirement;
     }
 
 }

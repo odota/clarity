@@ -4,7 +4,6 @@ import skadistats.clarity.decoder.FieldReader;
 import skadistats.clarity.decoder.bitstream.BitStream;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.s1.PropFlag;
-import skadistats.clarity.model.state.CursorGenerator;
 import skadistats.clarity.model.state.EntityState;
 import skadistats.clarity.util.TextTable;
 

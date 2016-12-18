@@ -10,7 +10,7 @@ public class LongVarUnsignedUnpacker implements Unpacker<Long> {
     }
 
     @Override
-    public int sizeOfValue() {
+    public int getNeededMemorySize() {
         return 8;
     }
 

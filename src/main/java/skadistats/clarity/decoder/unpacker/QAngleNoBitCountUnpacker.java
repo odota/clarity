@@ -18,7 +18,7 @@ public class QAngleNoBitCountUnpacker implements Unpacker<Vector> {
     }
 
     @Override
-    public int sizeOfValue() {
+    public int getNeededMemorySize() {
         return 12;
     }
 

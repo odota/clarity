@@ -16,6 +16,7 @@ public class S1DTClass implements DTClass {
     private int[] indexMapping;
     private Map<String, Integer> propsByName;
     private S1DTClass superClass;
+    private int memoryRequirement;
 
     public S1DTClass(String dtName, SendTable sendTable) {
         this.dtName = dtName;
@@ -40,6 +41,11 @@ public class S1DTClass implements DTClass {
     @Override
     public Integer getSubStateLength() {
         return receiveProps.length;
+    }
+
+    @Override
+    public int getNeededMemorySize() {
+        return memoryRequirement;
     }
 
     @Override
@@ -89,6 +95,7 @@ public class S1DTClass implements DTClass {
         this.propsByName = new HashMap<>();
         for(int i = 0; i < receiveProps.length; ++i) {
             this.propsByName.put(receiveProps[i].getVarName(), i);
+            memoryRequirement += receiveProps[i].getAccessor().getNeededMemorySize();
         }
     }
 

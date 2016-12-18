@@ -10,7 +10,7 @@ public class IntMinusOneUnpacker implements Unpacker<Integer> {
     }
 
     @Override
-    public int sizeOfValue() {
+    public int getNeededMemorySize() {
         return 4;
     }
 

@@ -20,8 +20,8 @@ public class VectorXYUnpacker implements Unpacker<Vector> {
     }
 
     @Override
-    public int sizeOfValue() {
-        return 2 * floatUnpacker.sizeOfValue();
+    public int getNeededMemorySize() {
+        return 2 * floatUnpacker.getNeededMemorySize();
     }
 
 }

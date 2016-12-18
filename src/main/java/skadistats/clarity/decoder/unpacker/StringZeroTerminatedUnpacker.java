@@ -10,7 +10,7 @@ public class StringZeroTerminatedUnpacker implements Unpacker<String> {
     }
 
     @Override
-    public int sizeOfValue() {
+    public int getNeededMemorySize() {
         return 64;
     }
 

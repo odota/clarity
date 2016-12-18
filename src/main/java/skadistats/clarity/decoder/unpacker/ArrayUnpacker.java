@@ -1,8 +1,11 @@
 package skadistats.clarity.decoder.unpacker;
 
+import skadistats.clarity.ClarityException;
 import skadistats.clarity.decoder.bitstream.BitStream;
 
 public class ArrayUnpacker<T> implements Unpacker<T[]> {
+
+    private static final int MAX_LEN = 64;
 
     private final Unpacker<T> unpacker;
     private final int nSizeBits;
@@ -15,6 +18,9 @@ public class ArrayUnpacker<T> implements Unpacker<T[]> {
     @Override
     public T[] unpack(BitStream bs) {
         int count = bs.readUBitInt(nSizeBits);
+        if (count > MAX_LEN) {
+            throw new ClarityException("cannot hold %d elements, max is %d", count, MAX_LEN);
+        }
         T[] result = (T[]) new Object[count];
         int i = 0;
         while (i < count) {
@@ -24,8 +30,8 @@ public class ArrayUnpacker<T> implements Unpacker<T[]> {
     }
 
     @Override
-    public int sizeOfValue() {
-        throw new UnsupportedOperationException();
+    public int getNeededMemorySize() {
+        return MAX_LEN * unpacker.getNeededMemorySize();
     }
 
 }

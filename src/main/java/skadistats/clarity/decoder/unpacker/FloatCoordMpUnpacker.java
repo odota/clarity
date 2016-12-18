@@ -18,7 +18,7 @@ public class FloatCoordMpUnpacker implements Unpacker<Float> {
     }
 
     @Override
-    public int sizeOfValue() {
+    public int getNeededMemorySize() {
         return 4;
     }
 

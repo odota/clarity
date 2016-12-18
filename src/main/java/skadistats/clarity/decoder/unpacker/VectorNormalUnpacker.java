@@ -13,7 +13,7 @@ public class VectorNormalUnpacker implements Unpacker<Vector> {
     }
 
     @Override
-    public int sizeOfValue() {
+    public int getNeededMemorySize() {
         return 12;
     }
 

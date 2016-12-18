@@ -28,6 +28,10 @@ public class VarSubTableField extends Field {
 
         elementAccessor = new Accessor() {
             @Override
+            public int getNeededMemorySize() {
+                return getProperties().getSerializer().getNeededMemorySize();
+            }
+            @Override
             public String getNameSegment(int i) {
                 return Util.arrayIdxToString(i);
             }
@@ -50,6 +54,10 @@ public class VarSubTableField extends Field {
         };
 
         accessor = new Accessor() {
+            @Override
+            public int getNeededMemorySize() {
+                return VarSubTableField.this.maxLength * elementAccessor.getNeededMemorySize();
+            }
             @Override
             public String getNameSegment(int i) {
                 return getProperties().getName();
@@ -95,11 +103,6 @@ public class VarSubTableField extends Field {
         fp.path[fp.last] = Integer.valueOf(idx);
         fp.last++;
         return properties.getSerializer().getFieldPathForName(fp, property.substring(5));
-    }
-
-    @Override
-    public int sizeOf() {
-        return maxLength * properties.getSerializer().sizeOf();
     }
 
 }

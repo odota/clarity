@@ -3,13 +3,9 @@ package skadistats.clarity.decoder.s2;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.state.Accessor;
-import skadistats.clarity.model.state.DumpEntry;
-import skadistats.clarity.model.state.EntityState;
-import skadistats.clarity.util.TextTable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class S2DTClass implements DTClass {
 
@@ -43,6 +39,11 @@ public class S2DTClass implements DTClass {
     @Override
     public Integer getSubStateLength() {
         return serializer.getSubStateLength();
+    }
+
+    @Override
+    public int getNeededMemorySize() {
+        return serializer.getNeededMemorySize();
     }
 
     public Serializer getSerializer() {

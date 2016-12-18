@@ -2,13 +2,13 @@ package skadistats.clarity.processor.sendtables;
 
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.ZeroCopy;
+import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.Util;
 import skadistats.clarity.decoder.s2.S2DTClass;
 import skadistats.clarity.decoder.s2.Serializer;
 import skadistats.clarity.decoder.s2.SerializerId;
 import skadistats.clarity.decoder.s2.field.Field;
 import skadistats.clarity.decoder.s2.field.FieldProperties;
-import skadistats.clarity.decoder.FieldType;
 import skadistats.clarity.decoder.s2.field.FixedArrayField;
 import skadistats.clarity.decoder.s2.field.FixedSubTableField;
 import skadistats.clarity.decoder.s2.field.SimpleField;
@@ -162,7 +162,6 @@ public class S2DTClassEmitter {
         }
 
         for (Serializer serializer : serializers.values()) {
-            System.out.format("%s: %s\n", serializer.getId(), serializer.computeRequiredSpace());
             DTClass dtClass = new S2DTClass(serializer);
             evDtClass.raise(dtClass);
         }
@@ -311,7 +310,6 @@ public class S2DTClassEmitter {
                 }
             }
         });
-
 
     }
 

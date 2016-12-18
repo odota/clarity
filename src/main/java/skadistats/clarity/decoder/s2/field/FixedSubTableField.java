@@ -23,6 +23,10 @@ public class FixedSubTableField extends Field {
 
         accessor = new Accessor() {
             @Override
+            public int getNeededMemorySize() {
+                return 1 + getProperties().getSerializer().getNeededMemorySize();
+            }
+            @Override
             public String getNameSegment(int i) {
                 return getProperties().getName();
             }
@@ -65,11 +69,6 @@ public class FixedSubTableField extends Field {
     @Override
     public FieldPath getFieldPathForName(FieldPath fp, String property) {
         return properties.getSerializer().getFieldPathForName(fp, property);
-    }
-
-    @Override
-    public int sizeOf() {
-        return properties.getSerializer().sizeOf();
     }
 
 }

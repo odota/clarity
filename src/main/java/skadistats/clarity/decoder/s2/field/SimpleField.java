@@ -18,6 +18,10 @@ public class SimpleField extends Field {
         unpacker = S2UnpackerFactory.createUnpacker(properties, properties.getType().getBaseType());
         accessor = new Accessor() {
             @Override
+            public int getNeededMemorySize() {
+                return unpacker.getNeededMemorySize();
+            }
+            @Override
             public String getNameSegment(int i) {
                 return getProperties().getName();
             }
@@ -46,11 +50,6 @@ public class SimpleField extends Field {
     @Override
     public FieldPath getFieldPathForName(FieldPath fp, String name) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int sizeOf() {
-        return unpacker.sizeOfValue();
     }
 
 }

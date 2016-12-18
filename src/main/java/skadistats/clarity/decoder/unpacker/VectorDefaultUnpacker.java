@@ -21,8 +21,8 @@ public class VectorDefaultUnpacker implements Unpacker<Vector> {
     }
 
     @Override
-    public int sizeOfValue() {
-        return 3 * floatUnpacker.sizeOfValue();
+    public int getNeededMemorySize() {
+        return 3 * floatUnpacker.getNeededMemorySize();
     }
 
 }

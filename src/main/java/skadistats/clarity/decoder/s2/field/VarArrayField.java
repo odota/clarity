@@ -35,6 +35,10 @@ public class VarArrayField extends Field {
 
         elementAccessor = new Accessor() {
             @Override
+            public int getNeededMemorySize() {
+                return elementUnpacker.getNeededMemorySize();
+            }
+            @Override
             public String getNameSegment(int i) {
                 return Util.arrayIdxToString(i);
             }
@@ -49,6 +53,10 @@ public class VarArrayField extends Field {
         };
 
         accessor = new Accessor() {
+            @Override
+            public int getNeededMemorySize() {
+                return 4 + VarArrayField.this.maxLength * elementAccessor.getNeededMemorySize();
+            }
             @Override
             public String getNameSegment(int i) {
                 return getProperties().getName();
@@ -94,11 +102,6 @@ public class VarArrayField extends Field {
         }
         fp.path[fp.last] = Integer.valueOf(property);
         return fp;
-    }
-
-    @Override
-    public int sizeOf() {
-        return maxLength * elementUnpacker.sizeOfValue();
     }
 
 }

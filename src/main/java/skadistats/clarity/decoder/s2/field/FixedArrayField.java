@@ -28,6 +28,10 @@ public class FixedArrayField extends Field {
         elementUnpacker = S2UnpackerFactory.createUnpacker(properties, elementType.getBaseType());
         elementAccessor = new Accessor() {
             @Override
+            public int getNeededMemorySize() {
+                return elementUnpacker.getNeededMemorySize();
+            }
+            @Override
             public String getNameSegment(int i) {
                 return Util.arrayIdxToString(i);
             }
@@ -42,6 +46,10 @@ public class FixedArrayField extends Field {
         };
 
         accessor = new Accessor() {
+            @Override
+            public int getNeededMemorySize() {
+                return FixedArrayField.this.length * elementAccessor.getNeededMemorySize();
+            }
             @Override
             public String getNameSegment(int i) {
                 return getProperties().getName();
@@ -78,11 +86,6 @@ public class FixedArrayField extends Field {
         }
         fp.path[fp.last] = Integer.valueOf(property);
         return fp;
-    }
-
-    @Override
-    public int sizeOf() {
-        return length * elementUnpacker.sizeOfValue();
     }
 
 }
