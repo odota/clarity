@@ -94,11 +94,6 @@ public class NestedArrayState implements EntityState {
         }
     }
 
-    @Override
-    public Object[] getState() {
-        return state;
-    }
-
     public class CursorImpl implements Cursor {
 
         private final Accessor[] accessor;

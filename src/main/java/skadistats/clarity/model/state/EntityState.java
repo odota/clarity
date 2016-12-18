@@ -7,7 +7,6 @@ import java.util.List;
 public interface EntityState {
 
     Cursor cursorForFieldPath(FieldPath fp);
-    Object[] getState();
 
     EntityState copy();
 
